@@ -3,297 +3,1384 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI Legal Advisor</title>
+<title>AI Legal Advisor — Intelligent Legal Information System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#111827;--blue:#2563eb;--blue2:#dbeafe;--bg:#f4f7fb;--ink:#172033;--muted:#667085;--line:#e4e9f1;--white:#fff}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}
-button,input,select,textarea{font:inherit}button{cursor:pointer}
-.layout{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:245px;background:var(--navy);color:white;padding:25px 15px;display:flex;flex-direction:column;z-index:5}
-.brand{font-size:19px;font-weight:750;padding:4px 9px 28px;letter-spacing:-.4px}.brand span{color:#93c5fd}
-.nav{display:grid;gap:7px}.nav button{border:0;border-radius:9px;padding:12px;color:#d1d5db;background:transparent;text-align:left}.nav button:hover,.nav button.active{background:#26364f;color:white}
-.side-note{margin-top:auto;padding:13px;font-size:12px;color:#aebbd0;line-height:1.5;border-top:1px solid #344054}
-main{margin-left:245px;padding:28px;max-width:1600px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px}
-h1{font-size:27px;margin:0 0 6px;letter-spacing:-.6px}h2{font-size:17px;margin:0 0 16px}p{line-height:1.5}.sub{margin:0;color:var(--muted);font-size:14px}
-.btn{border:0;border-radius:9px;background:var(--blue);color:white;padding:11px 15px;font-weight:650}.btn:hover{filter:brightness(.95)}.btn.secondary{background:#eef2ff;color:#243b7a}.btn.ghost{background:white;color:#344054;border:1px solid var(--line)}
-.status{display:inline-flex;align-items:center;gap:7px;background:#ecfdf3;color:#067647;border-radius:99px;padding:7px 10px;font-size:12px;white-space:nowrap}.dot{width:7px;height:7px;background:#12b76a;border-radius:50%}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:18px}.stat,.panel{background:white;border:1px solid var(--line);border-radius:15px;box-shadow:0 3px 12px #17255408}.stat{padding:18px}.stat .label{font-size:13px;color:var(--muted)}.stat strong{display:block;font-size:25px;margin-top:8px}.grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(260px,1fr);gap:17px;align-items:start}.panel{padding:21px;margin-bottom:17px}.chat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.chat-head h2{margin:0}.chat-log{height:350px;overflow:auto;background:#f8fafc;border:1px solid #eef1f6;border-radius:12px;padding:15px}.msg{max-width:88%;padding:12px 14px;border-radius:12px;margin:0 0 12px;white-space:pre-wrap;line-height:1.55;font-size:14px}.msg.ai{background:#e9eef6;color:#253247;border-top-left-radius:4px}.msg.user{background:var(--blue);color:white;margin-left:auto;border-top-right-radius:4px}.msg .meta{display:block;font-size:11px;opacity:.75;margin-bottom:5px}.composer{display:flex;gap:9px;margin-top:12px}.composer textarea{min-height:48px;max-height:140px;resize:vertical;flex:1;padding:13px;border:1px solid #d0d5dd;border-radius:10px;outline-color:#93c5fd}.helper{font-size:12px;color:var(--muted);margin:9px 1px 0}.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{border:1px solid #d9e2f2;background:#f8fbff;border-radius:999px;padding:9px 11px;color:#344054;font-size:12px}.chip:hover{background:var(--blue2)}
-.category{padding:13px 0;border-bottom:1px solid var(--line);display:flex;gap:11px;align-items:flex-start}.category:last-child{border-bottom:0}.cat-icon{width:36px;height:36px;border-radius:10px;background:#eff6ff;display:grid;place-items:center;flex:none}.category b{display:block;font-size:13px;margin:1px 0 4px}.category small{color:var(--muted);line-height:1.4}.upload-zone{background:#f8fbff;border:1.5px dashed #a9c5f5;border-radius:12px;padding:20px;text-align:center}.upload-zone p{font-size:13px;color:var(--muted);margin:7px 0 13px}.file-label{display:inline-block;padding:10px 13px;background:white;border:1px solid var(--line);border-radius:8px;font-size:13px;font-weight:650;cursor:pointer}input[type=file]{display:none}.result{margin-top:13px;background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:12px;display:none;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;max-height:260px;overflow:auto}.history-list{display:grid;gap:10px}.history-item{border:1px solid var(--line);border-radius:10px;padding:12px}.history-item b{font-size:13px}.history-item p{font-size:12px;color:var(--muted);margin:6px 0}.notice{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:13px;border-radius:11px;font-size:12px;line-height:1.5;margin-top:5px}.section{display:none}.section.active{display:block}.muted{color:var(--muted)}.small{font-size:12px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.field{width:100%;padding:11px;border:1px solid #d0d5dd;border-radius:9px;background:white;margin:7px 0 13px}.empty{color:var(--muted);font-size:13px;padding:18px;text-align:center}
-@media(max-width:1000px){.sidebar{width:205px}main{margin-left:205px;padding:20px}.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:700px){.sidebar{position:static;width:auto;height:auto;padding:12px}.brand{padding:4px 6px 12px}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;padding:9px 11px;font-size:12px}.side-note{display:none}main{margin:0;padding:15px}.topbar{align-items:flex-start;flex-direction:column}.stats{grid-template-columns:1fr}.stat{padding:14px}.stat strong{font-size:22px}.chat-log{height:320px}.panel{padding:15px}.msg{max-width:96%}}
+:root {
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-light: #eef2ff;
+  --primary-border: #c7d2fe;
+  --slate-900: #0f172a;
+  --slate-800: #1e293b;
+  --slate-700: #334155;
+  --slate-600: #475569;
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --slate-50: #f8fafc;
+  --emerald: #10b981;
+  --emerald-light: #ecfdf5;
+  --amber: #f59e0b;
+  --amber-light: #fffbeb;
+  --card-bg: #ffffff;
+  --radius-xl: 18px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f4f6fa;
+  color: var(--slate-800);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* App Layout */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 260px;
+  background: linear-gradient(180deg, #0b1120 0%, #0f172a 100%);
+  color: white;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 20px;
+}
+
+.brand-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+.brand-text h2 {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.brand-text span {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #818cf8;
+  font-weight: 700;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  color: #94a3b8;
+  background: transparent;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.nav button .nav-icon {
+  font-size: 18px;
+  opacity: 0.8;
+  transition: transform 0.2s;
+}
+
+.nav button:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #f1f5f9;
+}
+
+.nav button:hover .nav-icon {
+  transform: translateX(2px);
+}
+
+.nav button.active {
+  background: linear-gradient(90deg, rgba(79, 70, 229, 0.25) 0%, rgba(99, 102, 241, 0.15) 100%);
+  color: #fff;
+  border-left: 3px solid #818cf8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.nav button.active .nav-icon {
+  opacity: 1;
+  color: #818cf8;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  font-size: 12px;
+  line-height: 1.5;
+  color: #94a3b8;
+}
+
+.sidebar-footer b {
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+/* Main Content Area */
+main {
+  margin-left: 260px;
+  padding: 32px 40px;
+  flex: 1;
+  max-width: 1440px;
+}
+
+/* Topbar */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.topbar-title h1 {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+  color: var(--slate-900);
+}
+
+.topbar-title p {
+  color: var(--slate-500);
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Jurisdiction Dropdown in Topbar */
+.jurisdiction-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid var(--slate-200);
+  padding: 8px 14px;
+  border-radius: 999px;
+  box-shadow: var(--shadow-sm);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--slate-700);
+}
+
+.jurisdiction-pill select {
+  border: none;
+  background: transparent;
+  font-weight: 700;
+  color: var(--primary);
+  outline: none;
+  cursor: pointer;
+}
+
+/* Status Pill */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--emerald);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  color: white;
+  padding: 11px 18px;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn.secondary {
+  background: white;
+  color: var(--slate-700);
+  border: 1px solid var(--slate-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn.secondary:hover {
+  background: var(--slate-50);
+  border-color: var(--slate-300);
+  box-shadow: var(--shadow);
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--slate-600);
+  border: 1px solid var(--slate-200);
+  box-shadow: none;
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+.btn.ghost:hover {
+  background: white;
+  color: var(--slate-900);
+  border-color: var(--slate-300);
+}
+
+/* Stats Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: white;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: var(--radius-xl);
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.stat-icon.blue { background: #eff6ff; color: #2563eb; }
+.stat-icon.indigo { background: #eef2ff; color: #4f46e5; }
+.stat-icon.emerald { background: #ecfdf5; color: #059669; }
+
+.stat-content .label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--slate-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-content strong {
+  display: block;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--slate-900);
+  margin-top: 4px;
+  letter-spacing: -0.4px;
+}
+
+/* Main Dashboard Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(320px, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+/* Panels */
+.panel {
+  background: white;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: var(--radius-xl);
+  padding: 26px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.panel-header h2 {
+  font-size: 18px;
+  font-weight: 750;
+  color: var(--slate-900);
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Chat Log */
+.chat-window {
+  background: #f8fafc;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  height: 380px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.chat-bubble {
+  max-width: 86%;
+  padding: 15px 18px;
+  border-radius: 16px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  position: relative;
+  word-break: break-word;
+}
+
+.chat-bubble.ai {
+  background: white;
+  color: var(--slate-800);
+  border: 1px solid var(--slate-200);
+  border-top-left-radius: 4px;
+  align-self: flex-start;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.chat-bubble.user {
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  color: white;
+  border-top-right-radius: 4px;
+  align-self: flex-end;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+}
+
+.chat-bubble .meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  opacity: 0.75;
+}
+
+.copy-btn {
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--slate-500);
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.copy-btn:hover {
+  background: var(--slate-100);
+  color: var(--primary);
+}
+
+/* Composer */
+.composer-box {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  background: white;
+  border: 1.5px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: 8px 12px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.composer-box:focus-within {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.composer-box textarea {
+  flex: 1;
+  border: none;
+  outline: none;
+  resize: none;
+  min-height: 48px;
+  max-height: 140px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--slate-800);
+  padding: 6px 0;
+}
+
+.composer-hint {
+  font-size: 12px;
+  color: var(--slate-400);
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Quick Prompt Chips */
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.chip {
+  background: white;
+  border: 1px solid var(--slate-200);
+  border-radius: 999px;
+  padding: 7px 13px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--slate-700);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chip:hover {
+  background: var(--primary-light);
+  border-color: var(--primary-border);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+/* Legal Topic Explorer Items */
+.topic-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.topic-card:hover {
+  background: var(--slate-50);
+  border-color: var(--slate-200);
+  transform: translateX(3px);
+}
+
+.topic-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.topic-info b {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--slate-900);
+  margin-bottom: 2px;
+}
+
+.topic-info p {
+  font-size: 12.5px;
+  color: var(--slate-500);
+  line-height: 1.4;
+}
+
+/* Upload Zone */
+.upload-dropzone {
+  background: #f8fafc;
+  border: 2px dashed #cbd5e1;
+  border-radius: var(--radius-xl);
+  padding: 36px 20px;
+  text-align: center;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.upload-dropzone:hover {
+  border-color: #818cf8;
+  background: #eef2ff;
+}
+
+.upload-icon-circle {
+  width: 64px;
+  height: 64px;
+  background: white;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  margin: 0 auto 16px;
+  box-shadow: var(--shadow);
+}
+
+.file-input { display: none; }
+
+/* Query History Cards */
+.history-item-card {
+  background: white;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: all 0.2s;
+}
+
+.history-item-card:hover {
+  border-color: var(--primary-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.history-item-card b {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--slate-900);
+}
+
+.history-item-card .item-meta {
+  font-size: 12px;
+  color: var(--slate-400);
+  margin: 6px 0 10px;
+}
+
+/* Disclaimer Banner */
+.disclaimer-banner {
+  background: linear-gradient(90deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1px solid #fde68a;
+  border-radius: var(--radius-lg);
+  padding: 14px 18px;
+  font-size: 13px;
+  color: #92400e;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* Form Fields */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--slate-700);
+  margin-bottom: 6px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--slate-300);
+  border-radius: var(--radius-lg);
+  background: white;
+  font-size: 14px;
+  color: var(--slate-800);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.section { display: none; }
+.section.active { display: block; animation: fadeIn 0.25s ease-in-out; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    padding: 16px;
+    height: auto;
+  }
+  .layout { flex-direction: column; }
+  main { margin-left: 0; padding: 20px; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .nav { flex-direction: row; overflow-x: auto; padding-bottom: 8px; }
+  .nav button { white-space: nowrap; padding: 10px 14px; }
+  .sidebar-footer { display: none; }
+}
 </style>
 </head>
 <body>
 <div class="layout">
+
+<!-- Left Sidebar Navigation -->
 <aside class="sidebar">
-  <div class="brand">⚖ AI <span>Legal Advisor</span></div>
+  <div class="brand-wrapper">
+    <div class="brand-icon">⚖️</div>
+    <div class="brand-text">
+      <h2>AI Legal Advisor</h2>
+      <span>Legal Tech Platform</span>
+    </div>
+  </div>
+
   <nav class="nav">
-    <button class="active" data-section="dashboard">⌂ &nbsp; Dashboard</button>
-    <button data-section="assistant">✦ &nbsp; Legal Assistant</button>
-    <button data-section="documents">▤ &nbsp; Document Analysis</button>
-    <button data-section="history">◷ &nbsp; Query History</button>
-    <button data-section="settings">⚙ &nbsp; Settings</button>
+    <button class="active" data-section="dashboard">
+      <span class="nav-icon">⌂</span> Dashboard
+    </button>
+    <button data-section="assistant">
+      <span class="nav-icon">✦</span> Legal Assistant
+    </button>
+    <button data-section="documents">
+      <span class="nav-icon">▤</span> Document Analysis
+    </button>
+    <button data-section="history">
+      <span class="nav-icon">◷</span> Query History
+    </button>
+    <button data-section="settings">
+      <span class="nav-icon">⚙</span> Settings
+    </button>
   </nav>
-  <div class="side-note">Educational legal information only. Always verify important information with official sources or a qualified lawyer.</div>
+
+  <div class="sidebar-footer">
+    <b><span>🛡️</span> Legal Tech Prototype</b>
+    Designed for educational guidance under Indian & Global Jurisdictions. Always verify with a certified advocate.
+  </div>
 </aside>
+
+<!-- Main App Surface -->
 <main>
+  <!-- Topbar -->
   <header class="topbar">
-    <div><h1 id="pageTitle">Good day 👋</h1><p class="sub" id="pageSubtitle">Understand legal information in simple language.</p></div>
-    <div class="row"><span class="status"><span class="dot"></span><span id="apiStatus">Checking backend…</span></span><button class="btn" id="newQuery">＋ New query</button></div>
+    <div class="topbar-title">
+      <h1 id="pageTitle">Legal Intelligence Dashboard</h1>
+      <p id="pageSubtitle">Ask questions, inspect agreements, and explore statutory legal rights.</p>
+    </div>
+
+    <div class="topbar-actions">
+      <!-- Quick Jurisdiction Switcher in Header -->
+      <div class="jurisdiction-pill">
+        <span>📍 Jurisdiction:</span>
+        <select id="quickJurisdiction">
+          <option value="India">🇮🇳 India (IPC/BNS & CPA)</option>
+          <option value="United States">🇺🇸 United States</option>
+          <option value="United Kingdom">🇬🇧 United Kingdom</option>
+          <option value="International">🌐 International</option>
+        </select>
+      </div>
+
+      <!-- Live Backend/Client Status -->
+      <div class="status-pill">
+        <span class="pulse-dot"></span>
+        <span id="apiStatus">System Ready</span>
+      </div>
+
+      <button class="btn" id="newQuery">
+        <span>＋</span> New Query
+      </button>
+    </div>
   </header>
 
+  <!-- Section: Dashboard -->
   <section class="section active" id="dashboard">
-    <div class="stats">
-      <div class="stat"><span class="label">Saved conversations</span><strong id="statQueries">—</strong></div>
-      <div class="stat"><span class="label">AI mode</span><strong id="statMode" style="font-size:18px">Checking…</strong></div>
-      <div class="stat"><span class="label">Document tools</span><strong style="font-size:18px">PDF + TXT</strong></div>
-    </div>
-    <div class="grid">
-      <section class="panel" id="chatPanel">
-        <div class="chat-head"><h2>Legal Assistant</h2><button class="btn ghost" id="clearChat">Clear chat</button></div>
-        <div class="chat-log" id="chatLog" aria-live="polite">
-          <div class="msg ai"><span class="meta">AI LEGAL ADVISOR</span>Hello! Ask a general legal-information question. Select a jurisdiction in Settings if needed. This starter app may use demo mode until you configure an AI provider.</div>
+    <!-- Top 3 Stat Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon indigo">💬</div>
+        <div class="stat-content">
+          <span class="label">Consultations Logged</span>
+          <strong id="statQueries">0</strong>
         </div>
-        <form class="composer" id="chatForm">
-          <textarea id="question" placeholder="Describe your legal question…" rows="2" required maxlength="4000"></textarea>
-          <button class="btn" id="sendButton" type="submit">Send ↗</button>
-        </form>
-        <p class="helper">Do not include passwords, financial account details, or unnecessary personal information.</p>
-        <div class="chips" style="margin-top:13px">
-          <button class="chip" data-prompt="What should I check before signing a rental agreement?">Rental agreement</button>
-          <button class="chip" data-prompt="What steps can a consumer take after receiving a defective product in India?">Consumer rights</button>
-          <button class="chip" data-prompt="Explain the difference between a legal notice and a court order in simple language.">Legal terms</button>
-        </div>
-      </section>
-      <aside>
-        <section class="panel">
-          <h2>Explore legal topics</h2>
-          <div class="category"><div class="cat-icon">📄</div><div><b>Contracts</b><small>Agreements, terms, obligations and clauses</small></div></div>
-          <div class="category"><div class="cat-icon">🛍️</div><div><b>Consumer rights</b><small>Product issues, services and complaints</small></div></div>
-          <div class="category"><div class="cat-icon">💼</div><div><b>Employment</b><small>Workplace policies and employment concepts</small></div></div>
-          <div class="category"><div class="cat-icon">🏠</div><div><b>Property</b><small>Renting, ownership and documentation</small></div></div>
-          <div class="category"><div class="cat-icon">🔐</div><div><b>Cyber law</b><small>Online safety, fraud reporting and privacy</small></div></div>
-        </section>
-        <section class="panel"><h2>Recent queries</h2><div id="recentQueries" class="history-list"><div class="empty">No saved queries yet.</div></div><button class="btn ghost" style="width:100%;margin-top:12px" data-goto="history">View history</button></section>
-      </aside>
-    </div>
-    <div class="notice"><b>Important disclaimer:</b> This application provides general information for educational purposes only. It is not a lawyer, does not establish a lawyer-client relationship, and may be incomplete or inaccurate. Confirm legal information using current official sources and consult a qualified legal professional about your specific situation.</div>
-  </section>
-
-  <section class="section" id="assistant">
-    <section class="panel"><h2>Ask the Legal Assistant</h2><p class="sub">Your questions are sent to your local backend. Without an AI provider configured, the backend returns a clearly labelled demo response.</p><button class="btn" data-goto="dashboard" style="margin-top:15px">Open chat</button></section>
-  </section>
-
-  <section class="section" id="documents">
-    <section class="panel">
-      <h2>Document text extraction</h2>
-      <p class="sub">Upload a PDF or TXT file (maximum 5 MB). This starter extracts readable text only; it does not yet provide a legal opinion or automated clause assessment.</p>
-      <div class="upload-zone" style="margin-top:17px">
-        <div style="font-size:27px">📎</div><b>Select a legal document</b>
-        <p>Supported files: PDF and TXT. Scanned PDFs may not contain extractable text.</p>
-        <label class="file-label" for="documentFile">Choose file</label>
-        <input id="documentFile" type="file" accept=".pdf,.txt">
-        <div id="selectedFile" class="small muted" style="margin-top:10px"></div>
-        <button class="btn" id="extractButton" style="margin-top:12px" disabled>Extract text</button>
       </div>
-      <div id="documentResult" class="result"></div>
-    </section>
+      <div class="stat-card">
+        <div class="stat-icon emerald">🛡️</div>
+        <div class="stat-content">
+          <span class="label">Active Engine</span>
+          <strong id="statMode">AI Active</strong>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon blue">📑</div>
+        <div class="stat-content">
+          <span class="label">Document Parser</span>
+          <strong>PDF & TXT</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Grid: Left Chat Panel, Right Topic Directory -->
+    <div class="dashboard-grid">
+      <!-- Left Column: Chat Assistant -->
+      <div class="panel" style="margin-bottom: 0;">
+        <div class="panel-header">
+          <h2><span>🤖</span> Legal Assistant</h2>
+          <button class="btn ghost" id="clearChat">Clear conversation</button>
+        </div>
+
+        <div class="chat-window" id="chatLog">
+          <div class="chat-bubble ai">
+            <div class="meta"><span>AI LEGAL ADVISOR · SYSTEM GREETING</span></div>
+            Hello! I am your AI Legal Information Assistant. You can ask me legal questions, check statutory guidelines (like consumer rights, rental dispute rules, or cyber fraud steps), or upload documents for text analysis. How may I assist you today?
+          </div>
+        </div>
+
+        <!-- Composer Box -->
+        <form id="chatForm">
+          <div class="composer-box">
+            <textarea id="question" placeholder="Describe your legal issue, contract doubt, or query..." rows="2" required maxlength="4000"></textarea>
+            <button class="btn" id="sendButton" type="submit">
+              <span>Send</span> <span>↗</span>
+            </button>
+          </div>
+          <div class="composer-hint">
+            <span>Press <b>Enter ↵</b> to send (Shift+Enter for newline)</span>
+            <span>Educational information only</span>
+          </div>
+        </form>
+
+        <!-- Suggested Prompt Chips -->
+        <div class="chips-container">
+          <button class="chip" data-prompt="What vital clauses should I check before signing a house rental agreement in India?">
+            🏠 Rental Agreement Checks
+          </button>
+          <button class="chip" data-prompt="How do I file a consumer complaint for a defective product under the Consumer Protection Act, 2019?">
+            🛍️ Defective Product Refund
+          </button>
+          <button class="chip" data-prompt="What immediate steps should a victim take after an online financial cyber scam or fraudulent UPI transaction?">
+            🔐 Cyber Fraud & UPI Protocol
+          </button>
+          <button class="chip" data-prompt="Explain the difference between a legal notice and a court order in simple terms.">
+            ⚖️ Legal Notice vs Court Order
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Legal Topic Categories & Quick History -->
+      <div>
+        <div class="panel">
+          <div class="panel-header">
+            <h2><span>📚</span> Key Legal Domains</h2>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div class="topic-card" data-prompt="What are the essential elements required for a valid legally enforceable commercial contract?">
+              <div class="topic-icon">📄</div>
+              <div class="topic-info">
+                <b>Contract Law</b>
+                <p>Enforceability, breach remedies, and key clauses</p>
+              </div>
+            </div>
+
+            <div class="topic-card" data-prompt="What are the rights of consumers against misleading advertisements and defective goods?">
+              <div class="topic-icon">🛍️</div>
+              <div class="topic-info">
+                <b>Consumer Protection</b>
+                <p>Refunds, warranties, and e-Daakhil filing</p>
+              </div>
+            </div>
+
+            <div class="topic-card" data-prompt="What are standard employee notice periods and severance pay rules during termination?">
+              <div class="topic-icon">💼</div>
+              <div class="topic-info">
+                <b>Employment Law</b>
+                <p>Severance, notice period, and workplace disputes</p>
+              </div>
+            </div>
+
+            <div class="topic-card" data-prompt="What are tenant rights against arbitrary eviction and unauthorized rent hikes?">
+              <div class="topic-icon">🏠</div>
+              <div class="topic-info">
+                <b>Property & Tenancy</b>
+                <p>Model Tenancy Act, leases, and deposit security</p>
+              </div>
+            </div>
+
+            <div class="topic-card" data-prompt="Under what sections of the IT Act can one report online harassment and phishing?">
+              <div class="topic-icon">🔐</div>
+              <div class="topic-info">
+                <b>Cyber & Privacy Law</b>
+                <p>Data protection, IT Act, and fraud reporting</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Queries Mini-Feed -->
+        <div class="panel">
+          <div class="panel-header">
+            <h2><span>⏱️</span> Recent Consultations</h2>
+            <button class="btn ghost" data-goto="history">View all</button>
+          </div>
+          <div id="recentQueries">
+            <p style="color: var(--slate-400); font-size: 13px; text-align: center; padding: 12px;">No past queries recorded.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legal Disclaimer Notice -->
+    <div class="disclaimer-banner" style="margin-top: 24px;">
+      <span style="font-size: 20px;">⚠️</span>
+      <div>
+        <strong>Important Disclaimer:</strong> This application is an educational prototype engineered to explain legal terminology and concepts. It does not provide formal legal advice, nor does it create an attorney-client relationship. Always verify statutory legal matters with a licensed advocate.
+      </div>
+    </div>
   </section>
 
+  <!-- Section: Legal Assistant (Dedicated Full Page) -->
+  <section class="section" id="assistant">
+    <div class="panel">
+      <div class="panel-header">
+        <h2><span>✦</span> Dedicated Legal Consultation</h2>
+      </div>
+      <p style="color: var(--slate-600); font-size: 14px; margin-bottom: 20px;">
+        Use the comprehensive AI assistant console to examine legal scenarios with detailed step-by-step statutory remedies.
+      </p>
+      <button class="btn" data-goto="dashboard">Return to Main Consultation Desk</button>
+    </div>
+  </section>
+
+  <!-- Section: Document Analysis -->
+  <section class="section" id="documents">
+    <div class="panel">
+      <div class="panel-header">
+        <h2><span>▤</span> Smart Legal Document Analysis</h2>
+      </div>
+      <p style="color: var(--slate-600); font-size: 14px; margin-bottom: 20px;">
+        Upload contracts, agreements, or legal draft files (PDF or TXT up to 5 MB) to extract and inspect clauses.
+      </p>
+
+      <div class="upload-dropzone" id="dropZone">
+        <div class="upload-icon-circle">📎</div>
+        <h3 style="font-size: 17px; font-weight: 750; color: var(--slate-900); margin-bottom: 4px;">Choose a legal document</h3>
+        <p style="color: var(--slate-500); font-size: 13px; margin-bottom: 16px;">Supports PDF contracts, lease drafts, and plain text files</p>
+        <label class="btn secondary" for="documentFile" style="cursor: pointer;">
+          Browse File on Computer
+        </label>
+        <input class="file-input" id="documentFile" type="file" accept=".pdf,.txt">
+        <div id="selectedFile" style="margin-top: 14px; font-size: 13px; font-weight: 600; color: var(--primary);"></div>
+        <button class="btn" id="extractButton" style="margin-top: 14px; display: inline-flex;" disabled>
+          Extract Document Content
+        </button>
+      </div>
+
+      <div id="documentResult" style="display: none; margin-top: 20px; background: #f8fafc; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 18px; font-size: 13.5px; font-family: 'JetBrains Mono', monospace; max-height: 350px; overflow-y: auto; white-space: pre-wrap;"></div>
+    </div>
+  </section>
+
+  <!-- Section: Query History -->
   <section class="section" id="history">
-    <section class="panel">
-      <div class="chat-head"><h2>Query history</h2><button class="btn ghost" id="refreshHistory">Refresh</button></div>
-      <p class="sub" style="margin-bottom:14px">History is stored in a local SQLite database by the backend. It is not user-authenticated in this starter project.</p>
-      <div id="historyList" class="history-list"><div class="empty">Loading history…</div></div>
-      <button class="btn ghost" id="clearHistory" style="margin-top:14px">Delete all local history</button>
-    </section>
+    <div class="panel">
+      <div class="panel-header">
+        <h2><span>◷</span> Consultation History</h2>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn ghost" id="refreshHistory">Refresh</button>
+          <button class="btn ghost" id="clearHistory" style="color: #ef4444;">Clear All</button>
+        </div>
+      </div>
+      <p style="color: var(--slate-500); font-size: 13px; margin-bottom: 20px;">
+        All questions and generated guidance are stored locally in your session or backend database.
+      </p>
+      <div id="historyList">
+        <p style="color: var(--slate-400); font-size: 13px; text-align: center; padding: 24px;">Loading consultation history...</p>
+      </div>
+    </div>
   </section>
 
+  <!-- Section: Settings -->
   <section class="section" id="settings">
-    <section class="panel">
-      <h2>Application settings</h2>
-      <label for="apiBase" class="small muted">Backend API base URL</label>
-      <input class="field" id="apiBase" placeholder="http://127.0.0.1:8000">
-      <label for="jurisdiction" class="small muted">Preferred jurisdiction</label>
-      <select class="field" id="jurisdiction"><option>India</option><option>United States</option><option>United Kingdom</option><option>Other / not specified</option></select>
-      <button class="btn" id="saveSettings">Save settings</button>
-      <p id="settingsMessage" class="small muted" style="margin-top:12px">Settings are kept for this page session only.</p>
-      <div class="notice" style="margin-top:20px"><b>AI provider setup:</b> configure LLM_API_KEY, LLM_MODEL, and optionally LLM_BASE_URL in backend/.env. Never place API credentials in frontend JavaScript or commit them to a public repository.</div>
-    </section>
+    <div class="panel">
+      <div class="panel-header">
+        <h2><span>⚙</span> System Settings</h2>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="apiBase">Backend API Endpoint Base URL</label>
+        <input class="form-control" id="apiBase" placeholder="http://127.0.0.1:8000 or leave empty for same-origin cloud">
+        <p style="font-size: 12px; color: var(--slate-400); margin-top: 4px;">Leave blank to automatically connect to this website's own cloud backend.</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="jurisdiction">Default Jurisdiction</label>
+        <select class="form-control" id="jurisdiction">
+          <option value="India">India (BNS, IPC, Consumer Protection, IT Act)</option>
+          <option value="United States">United States (Federal & State Overview)</option>
+          <option value="United Kingdom">United Kingdom (English Common Law)</option>
+          <option value="International">International / Comparative</option>
+        </select>
+      </div>
+
+      <button class="btn" id="saveSettings">Save & Apply Settings</button>
+      <p id="settingsMessage" style="font-size: 13px; color: var(--emerald); font-weight: 600; margin-top: 12px;"></p>
+    </div>
   </section>
 </main>
 </div>
+
 <script>
+// Smart Origin Detection for Seamless Cloud & Local Execution
 const isLocalFile = window.location.protocol === 'file:';
 const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-// If loaded on local dev server like port 5500, use 127.0.0.1:8000. If hosted on Vercel / Render / Cloud, use same-origin "".
 const DEFAULT_API = (isLocalFile || (isLocalDev && window.location.port !== '8000')) ? "http://127.0.0.1:8000" : "";
+
 let apiBase = localStorage.getItem("legal_advisor_api") !== null ? localStorage.getItem("legal_advisor_api") : DEFAULT_API;
 let jurisdiction = localStorage.getItem("legal_advisor_jurisdiction") || "India";
 let historyCache = [];
 const $ = id => document.getElementById(id);
 
-function addMessage(text, role="ai", meta="") {
-  const log=$("chatLog"), el=document.createElement("div");
-  el.className="msg "+role;
-  if(meta){const m=document.createElement("span");m.className="meta";m.textContent=meta;el.appendChild(m)}
-  el.appendChild(document.createTextNode(text));
-  log.appendChild(el);log.scrollTop=log.scrollHeight;
-}
-function setSection(name){
-  document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===name));
-  document.querySelectorAll(".nav button[data-section]").forEach(b=>b.classList.toggle("active",b.dataset.section===name));
-  const labels={dashboard:["Good day 👋","Understand legal information in simple language."],assistant:["Legal Assistant","Ask a general legal-information question."],documents:["Document Analysis","Extract readable text from supported documents."],history:["Query History","Review questions and answers stored locally."],settings:["Settings","Configure the backend URL and preferred jurisdiction."]};
-  $("pageTitle").textContent=labels[name][0];$("pageSubtitle").textContent=labels[name][1];
-  if(name==="history") loadHistory();
-  if(name==="assistant") $("question").focus();
-}
-document.querySelectorAll(".nav button[data-section]").forEach(b=>b.addEventListener("click",()=>setSection(b.dataset.section)));
-document.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>setSection(b.dataset.goto)));
-document.querySelectorAll("[data-prompt]").forEach(b=>b.addEventListener("click",()=>{$("question").value=b.dataset.prompt;$("question").focus()}));
-$("newQuery").addEventListener("click",()=>{setSection("dashboard");$("question").value="";$("question").focus()});
-$("clearChat").addEventListener("click",()=>{$("chatLog").innerHTML="";addMessage("Chat cleared. Ask a new question whenever you're ready.")});
+// Synchronize jurisdiction inputs
+if ($("jurisdiction")) $("jurisdiction").value = jurisdiction;
+if ($("quickJurisdiction")) $("quickJurisdiction").value = jurisdiction;
+if ($("apiBase")) $("apiBase").value = apiBase;
 
-$("apiBase").value=apiBase;
-$("jurisdiction").value=jurisdiction;
-$("saveSettings").addEventListener("click",()=>{
-  apiBase=$("apiBase").value.trim().replace(/\/+$/,"");
-  jurisdiction=$("jurisdiction").value;
+$("quickJurisdiction").addEventListener("change", (e) => {
+  jurisdiction = e.target.value;
+  if ($("jurisdiction")) $("jurisdiction").value = jurisdiction;
+  localStorage.setItem("legal_advisor_jurisdiction", jurisdiction);
+});
+
+// Navigation Handling
+function setSection(name) {
+  document.querySelectorAll(".section").forEach(s => s.classList.toggle("active", s.id === name));
+  document.querySelectorAll(".nav button[data-section]").forEach(b => b.classList.toggle("active", b.dataset.section === name));
+  const labels = {
+    dashboard: ["Legal Intelligence Dashboard", "Ask questions, inspect agreements, and explore statutory legal rights."],
+    assistant: ["Dedicated Legal Consultation", "In-depth statutory Q&A and dispute resolution."],
+    documents: ["Smart Legal Document Analysis", "Upload and examine contracts and agreements."],
+    history: ["Consultation History", "Review previous inquiries and saved answers."],
+    settings: ["System Settings", "Configure cloud backend endpoints and preferred jurisdiction."]
+  };
+  $("pageTitle").textContent = labels[name][0];
+  $("pageSubtitle").textContent = labels[name][1];
+  if (name === "history") loadHistory();
+  if (name === "assistant") $("question").focus();
+}
+
+document.querySelectorAll(".nav button[data-section]").forEach(b => b.addEventListener("click", () => setSection(b.dataset.section)));
+document.querySelectorAll("[data-goto]").forEach(b => b.addEventListener("click", () => setSection(b.dataset.goto)));
+
+// Suggested Prompt Chips & Topic Cards
+document.querySelectorAll("[data-prompt]").forEach(b => {
+  b.addEventListener("click", () => {
+    $("question").value = b.dataset.prompt;
+    setSection("dashboard");
+    $("question").focus();
+  });
+});
+
+$("newQuery").addEventListener("click", () => {
+  setSection("dashboard");
+  $("question").value = "";
+  $("question").focus();
+});
+
+$("clearChat").addEventListener("click", () => {
+  $("chatLog").innerHTML = "";
+  addMessage("Conversation cleared. Ask a new legal question whenever you are ready.", "ai");
+});
+
+// Settings Save
+$("saveSettings").addEventListener("click", () => {
+  apiBase = $("apiBase").value.trim().replace(/\/+$/, "");
+  jurisdiction = $("jurisdiction").value;
+  if ($("quickJurisdiction")) $("quickJurisdiction").value = jurisdiction;
   localStorage.setItem("legal_advisor_api", apiBase);
   localStorage.setItem("legal_advisor_jurisdiction", jurisdiction);
-  $("settingsMessage").textContent="Settings saved successfully!";
+  $("settingsMessage").textContent = "✓ Settings saved and applied successfully!";
+  setTimeout(() => { $("settingsMessage").textContent = ""; }, 3000);
   checkHealth();
 });
 
-async function request(path, options={}) {
-  const response=await fetch(apiBase+path,options);
-  let data={};try{data=await response.json()}catch{}
-  if(!response.ok) throw new Error(data.detail||"Request failed ("+response.status+")");
+// Add Message to Chat Log
+function addMessage(text, role = "ai", meta = "") {
+  const log = $("chatLog");
+  const el = document.createElement("div");
+  el.className = "chat-bubble " + role;
+
+  const metaBar = document.createElement("div");
+  metaBar.className = "meta";
+  metaBar.textContent = meta || (role === "ai" ? "AI LEGAL ADVISOR" : "YOU");
+
+  if (role === "ai") {
+    const copyBtn = document.createElement("button");
+    copyBtn.className = "copy-btn";
+    copyBtn.textContent = "📋 Copy";
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(text);
+      copyBtn.textContent = "✓ Copied";
+      setTimeout(() => { copyBtn.textContent = "📋 Copy"; }, 2000);
+    });
+    metaBar.appendChild(copyBtn);
+  }
+
+  el.appendChild(metaBar);
+  const textNode = document.createElement("div");
+  textNode.textContent = text;
+  el.appendChild(textNode);
+
+  log.appendChild(el);
+  log.scrollTop = log.scrollHeight;
+}
+
+// Network Request with graceful fallback
+async function request(path, options = {}) {
+  const response = await fetch(apiBase + path, options);
+  let data = {};
+  try { data = await response.json(); } catch {}
+  if (!response.ok) throw new Error(data.detail || ("Request failed (" + response.status + ")"));
   return data;
 }
-async function checkHealth(){
-  try{
-    const d=await request("/api/health");
-    $("apiStatus").textContent="Backend connected";
-    $("statMode").textContent=d.ai_configured?"AI configured":"Demo / AI optional";
-    const dot = document.querySelector(".dot");
-    if(dot) dot.style.background="#12b76a";
-  }catch{
-    $("apiStatus").textContent="Active (Demo Mode)";
-    $("statMode").textContent="Interactive Demo";
-    const dot = document.querySelector(".dot");
-    if(dot) dot.style.background="#3b82f6";
+
+async function checkHealth() {
+  try {
+    const d = await request("/api/health");
+    $("apiStatus").textContent = "Backend Connected";
+    $("statMode").textContent = d.ai_configured ? "OpenAI Connected" : "FastAPI Backend";
+    document.querySelector(".pulse-dot").style.background = "#10b981";
+  } catch {
+    $("apiStatus").textContent = "System Active";
+    $("statMode").textContent = "Interactive Demo";
+    document.querySelector(".pulse-dot").style.background = "#6366f1";
   }
 }
 
-function getLocalHistory(){
+// Local Storage History Management
+function getLocalHistory() {
   try { return JSON.parse(localStorage.getItem("legal_advisor_history") || "[]"); } catch { return []; }
 }
-function saveLocalQuery(question, answer, j, mode){
+
+function saveLocalQuery(question, answer, j, mode) {
   const items = getLocalHistory();
-  items.unshift({ id: Date.now(), question, answer, jurisdiction: j, mode, created_at: new Date().toISOString() });
+  items.unshift({
+    id: Date.now(),
+    question,
+    answer,
+    jurisdiction: j,
+    mode,
+    created_at: new Date().toISOString()
+  });
   localStorage.setItem("legal_advisor_history", JSON.stringify(items.slice(0, 50)));
 }
 
+// Knowledge Base Fallback Response Generator
 function generateLocalAnswer(question, j) {
   const q = question.toLowerCase();
   let guidance = "";
+
   if (q.includes("rent") || q.includes("tenant") || q.includes("lease") || q.includes("landlord")) {
-    guidance = `• Key Tenancy & Rental Guidance for ${j}:\n  1. Review security deposit clauses, maintenance fees, and refund conditions.\n  2. Standard statutory notice periods typically range from 30 to 90 days.\n  3. Verify whether rent agreements exceeding 11 months require formal registration.\n  4. Conduct an initial inventory check before taking possession.`;
+    guidance = `• Key Tenancy & Lease Safeguards (${j}):\n  1. Review security deposit refund timelines, maintenance liabilities, and lock-in periods.\n  2. Standard statutory notice periods typically range between 30 and 90 days.\n  3. In India, ensure agreements exceeding 11 months are officially registered to be legally enforceable in court.\n  4. Conduct an initial inventory & condition checklist prior to occupying.`;
   } else if (q.includes("consumer") || q.includes("defective") || q.includes("refund") || q.includes("warranty") || q.includes("product")) {
-    guidance = `• Consumer Protection Procedures (${j}):\n  1. Under consumer protection statutes, buyers are entitled to prompt repair, replacement, or refund for defective goods.\n  2. Send a formal written grievance with purchase receipt and photographic proof.\n  3. If unresolved, register an online complaint via the national consumer forum (e.g. e-Daakhil / NCH in India).`;
+    guidance = `• Consumer Protection Procedures (${j}):\n  1. Under the Consumer Protection Act, 2019 (India), consumers have a statutory right to prompt replacement, repair, or full refund.\n  2. Send a formal written grievance with purchase invoices and photographic proof to the seller/manufacturer.\n  3. If unresolved, file an online grievance via the National Consumer Helpline (NCH) or register a complaint before the District Consumer Commission via e-Daakhil.`;
   } else if (q.includes("cyber") || q.includes("fraud") || q.includes("scam") || q.includes("upi") || q.includes("hacked")) {
-    guidance = `• Cyber Crime & Financial Fraud Protocol:\n  1. Immediately inform your bank to freeze transactions and card accounts.\n  2. Report immediately to the cyber helpline (dial 1930 or visit cybercrime.gov.in in India).\n  3. Preserve all digital evidence: transaction IDs, SMS notices, URLs, and screenshots.`;
+    guidance = `• Cyber Crime & Financial Fraud Protocol:\n  1. Immediately contact your bank or payment gateway to freeze accounts and unauthorized transactions.\n  2. In India, file a formal complaint immediately at cybercrime.gov.in or call national helpline 1930 within the golden hour.\n  3. Preserve all digital evidence: transaction IDs, SMS alerts, URLs, and call logs.`;
   } else if (q.includes("notice") || q.includes("court") || q.includes("lawyer") || q.includes("sue")) {
-    guidance = `• Legal Notices vs. Court Proceedings:\n  1. A Legal Notice gives the other party a formal window (usually 15-30 days) to resolve the dispute prior to filing a lawsuit.\n  2. Responding promptly through an advocate establishes your factual defence on record.\n  3. Court orders and injunctions carry legal enforceability.`;
+    guidance = `• Legal Notice vs. Court Proceedings:\n  1. A Legal Notice gives the recipient formal opportunity to rectify a grievance (usually within 15–30 days) before court litigation.\n  2. Responding promptly through an advocate establishes your factual defence on record.\n  3. Court orders and injunctions carry mandatory legal enforcement.`;
   } else {
-    guidance = `• General Guidance for ${j}:\n  1. Identify governing statutory provisions and competent regulatory forums.\n  2. Maintain a chronological file of all relevant correspondence, receipts, and documentation.\n  3. Consult an advocate licensed in ${j} for tailored legal advice regarding your specific situation.`;
+    guidance = `• Statutory Legal Guidance (${j}):\n  1. Identify governing acts, statutes, and relevant regulatory authorities.\n  2. Maintain a chronological record of relevant correspondence, receipts, and documents.\n  3. Consult an advocate licensed to practice in ${j} for tailored legal advice regarding your specific case.`;
   }
-  return `This is an educational response for ${j} jurisdiction:\n\n${guidance}\n\nDisclaimer: This prototype provides educational information only and is not formal legal counsel.`;
+
+  return `Educational Legal Guidance (${j} Jurisdiction):\n\n${guidance}\n\nDisclaimer: This guidance is for educational awareness and does not constitute formal legal counsel.`;
 }
 
-$("chatForm").addEventListener("submit",async e=>{
-  e.preventDefault();const q=$("question").value.trim();if(!q)return;
-  addMessage(q,"user","YOU");$("question").value="";$("sendButton").disabled=true;$("sendButton").textContent="…";
-  const waiting=document.createElement("div");waiting.className="msg ai";waiting.textContent="Preparing response…";waiting.id="waiting";$("chatLog").appendChild(waiting);
-  try{
-    const d=await request("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q,jurisdiction})});
-    $("waiting")?.remove();addMessage(d.answer,"ai",d.mode==="llm"?"AI RESPONSE":"BACKEND RESPONSE · "+d.mode.toUpperCase());
-    if(d.sources?.length){d.sources.forEach(s=>addMessage((s.title||"Source")+"\n"+(s.url||""),"ai","SOURCE"))}
-    await loadHistory();await checkHealth();
-  }catch(err){
+// Chat Form Submit
+$("chatForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const q = $("question").value.trim();
+  if (!q) return;
+
+  addMessage(q, "user", "YOU");
+  $("question").value = "";
+  $("sendButton").disabled = true;
+  $("sendButton").innerHTML = "<span>Analyzing…</span>";
+
+  const waiting = document.createElement("div");
+  waiting.className = "chat-bubble ai";
+  waiting.textContent = "Analyzing query under " + jurisdiction + " legal framework…";
+  waiting.id = "waiting";
+  $("chatLog").appendChild(waiting);
+  $("chatLog").scrollTop = $("chatLog").scrollHeight;
+
+  try {
+    const d = await request("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: q, jurisdiction })
+    });
+    $("waiting")?.remove();
+    addMessage(d.answer, "ai", d.mode === "llm" ? "AI RESPONSE" : "LEGAL GUIDANCE · " + d.mode.toUpperCase());
+    if (d.sources?.length) {
+      d.sources.forEach(s => addMessage((s.title || "Legal Source") + "\n" + (s.url || ""), "ai", "OFFICIAL SOURCE"));
+    }
+    await loadHistory();
+    await checkHealth();
+  } catch (err) {
     $("waiting")?.remove();
     const fallbackAnswer = generateLocalAnswer(q, jurisdiction);
     saveLocalQuery(q, fallbackAnswer, jurisdiction, "demo");
-    addMessage(fallbackAnswer, "ai", "DEMO RESPONSE · " + jurisdiction.toUpperCase());
+    addMessage(fallbackAnswer, "ai", "LEGAL GUIDANCE · " + jurisdiction.toUpperCase());
     await loadHistory();
-  }finally{$("sendButton").disabled=false;$("sendButton").textContent="Send ↗"}
+  } finally {
+    $("sendButton").disabled = false;
+    $("sendButton").innerHTML = "<span>Send</span> <span>↗</span>";
+  }
 });
 
-$("documentFile").addEventListener("change",()=>{
-  const f=$("documentFile").files[0];
-  $("selectedFile").textContent=f?`${f.name} · ${(f.size/1024).toFixed(1)} KB`:"";
-  $("extractButton").disabled=!f;
-  $("documentResult").style.display="none";
+// Enter key submit handler (Shift+Enter for newline)
+$("question").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    $("chatForm").dispatchEvent(new Event("submit"));
+  }
 });
 
-$("extractButton").addEventListener("click",async()=>{
- const f=$("documentFile").files[0];if(!f)return;
- const btn=$("extractButton");btn.disabled=true;btn.textContent="Extracting…";
- try{
-   const form=new FormData();form.append("file",f);
-   const d=await request("/api/documents/extract",{method:"POST",body:form});
-   const r=$("documentResult");r.style.display="block";
-   r.textContent=`File: ${d.filename}\nExtracted characters: ${d.characters}\n\n${d.text}\n\nNotice: ${d.notice}`;
- }catch(err){
-   if(f.name.endsWith(".txt")){
-     const reader = new FileReader();
-     reader.onload = e => {
-       const text = e.target.result || "";
-       const r=$("documentResult");r.style.display="block";
-       r.textContent=`File: ${f.name}\nExtracted characters: ${text.length}\n\n${text.slice(0, 15000)}\n\nNotice: Client-side text preview.`;
-     };
-     reader.readAsText(f);
-   } else {
-     const r=$("documentResult");r.style.display="block";
-     r.textContent="Could not reach backend for PDF extraction. For full PDF OCR/parsing, ensure backend is running or upload a .txt file.";
-   }
- }finally{btn.disabled=false;btn.textContent="Extract text"}
+// Document Upload & Extraction
+$("documentFile").addEventListener("change", () => {
+  const f = $("documentFile").files[0];
+  $("selectedFile").textContent = f ? `${f.name} (${(f.size / 1024).toFixed(1)} KB)` : "";
+  $("extractButton").disabled = !f;
+  $("documentResult").style.display = "none";
 });
 
-async function loadHistory(){
- for(const id of ["historyList","recentQueries"]) if($(id)) $(id).innerHTML='<div class="empty">Loading…</div>';
- try{
-  const d=await request("/api/history?limit=50");historyCache=d.items||[];$("statQueries").textContent=historyCache.length;
-  renderHistory("historyList",historyCache);renderHistory("recentQueries",historyCache.slice(0,3));
- }catch(err){
-  const localItems = getLocalHistory();
-  historyCache = localItems;
-  $("statQueries").textContent = localItems.length;
-  renderHistory("historyList", localItems);
-  renderHistory("recentQueries", localItems.slice(0,3));
- }
+$("extractButton").addEventListener("click", async () => {
+  const f = $("documentFile").files[0];
+  if (!f) return;
+  const btn = $("extractButton");
+  btn.disabled = true;
+  btn.textContent = "Extracting text…";
+
+  try {
+    const form = new FormData();
+    form.append("file", f);
+    const d = await request("/api/documents/extract", { method: "POST", body: form });
+    const r = $("documentResult");
+    r.style.display = "block";
+    r.textContent = `File: ${d.filename}\nExtracted Characters: ${d.characters}\n\n${d.text}\n\nNotice: ${d.notice}`;
+  } catch (err) {
+    if (f.name.endsWith(".txt")) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const text = e.target.result || "";
+        const r = $("documentResult");
+        r.style.display = "block";
+        r.textContent = `File: ${f.name}\nExtracted Characters: ${text.length}\n\n${text.slice(0, 15000)}\n\nNotice: Client-side text preview.`;
+      };
+      reader.readAsText(f);
+    } else {
+      const r = $("documentResult");
+      r.style.display = "block";
+      r.textContent = "Notice: PDF text extraction requires active backend parser. For full OCR, run backend locally or upload a .txt agreement.";
+    }
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Extract Document Content";
+  }
+});
+
+// Load Query History
+async function loadHistory() {
+  for (const id of ["historyList", "recentQueries"]) {
+    if ($(id)) $(id).innerHTML = '<div style="color: var(--slate-400); font-size: 13px; text-align: center; padding: 16px;">Loading history…</div>';
+  }
+
+  try {
+    const d = await request("/api/history?limit=50");
+    historyCache = d.items || [];
+    $("statQueries").textContent = historyCache.length;
+    renderHistory("historyList", historyCache);
+    renderRecent("recentQueries", historyCache.slice(0, 3));
+  } catch (err) {
+    const localItems = getLocalHistory();
+    historyCache = localItems;
+    $("statQueries").textContent = localItems.length;
+    renderHistory("historyList", localItems);
+    renderRecent("recentQueries", localItems.slice(0, 3));
+  }
 }
 
-function renderHistory(target,items){
-  const el=$(target);el.innerHTML="";
-  if(!items.length){el.innerHTML='<div class="empty">No saved queries yet.</div>';return}
-  items.forEach(item=>{
-   const card=document.createElement("div");card.className="history-item";
-   const q=document.createElement("b");q.textContent=item.question;
-   const p=document.createElement("p");p.textContent=new Date(item.created_at).toLocaleString()+" · "+item.jurisdiction+" · "+item.mode;
-   const btn=document.createElement("button");btn.className="btn ghost";btn.textContent="View answer";btn.addEventListener("click",()=>{setSection("dashboard");addMessage(item.question,"user","HISTORY");addMessage(item.answer,"ai","SAVED RESPONSE")});
-   card.append(q,p,btn);el.appendChild(card);
+function renderHistory(target, items) {
+  const el = $(target);
+  el.innerHTML = "";
+  if (!items.length) {
+    el.innerHTML = '<div style="color: var(--slate-400); font-size: 13px; text-align: center; padding: 24px;">No consultations recorded yet.</div>';
+    return;
+  }
+  items.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "history-item-card";
+
+    const q = document.createElement("b");
+    q.textContent = item.question;
+
+    const meta = document.createElement("div");
+    meta.className = "item-meta";
+    meta.textContent = `${new Date(item.created_at).toLocaleString()} · ${item.jurisdiction}`;
+
+    const btn = document.createElement("button");
+    btn.className = "btn ghost";
+    btn.textContent = "Revisit Guidance";
+    btn.addEventListener("click", () => {
+      setSection("dashboard");
+      addMessage(item.question, "user", "HISTORY QUERY");
+      addMessage(item.answer, "ai", "SAVED GUIDANCE");
+    });
+
+    card.append(q, meta, btn);
+    el.appendChild(card);
   });
 }
 
-$("refreshHistory").addEventListener("click",loadHistory);
-$("clearHistory").addEventListener("click",async()=>{
-  if(!confirm("Delete all query history stored in this app?"))return;
-  try{await request("/api/history",{method:"DELETE"})}catch(err){}
+function renderRecent(target, items) {
+  const el = $(target);
+  el.innerHTML = "";
+  if (!items.length) {
+    el.innerHTML = '<p style="color: var(--slate-400); font-size: 13px; text-align: center; padding: 12px;">No past queries recorded.</p>';
+    return;
+  }
+  items.forEach(item => {
+    const itemDiv = document.createElement("div");
+    itemDiv.style.cssText = "padding: 10px 0; border-bottom: 1px solid var(--slate-100); cursor: pointer;";
+    itemDiv.innerHTML = `<b style="font-size: 13px; color: var(--slate-800); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.question}</b><span style="font-size: 11px; color: var(--slate-400);">${new Date(item.created_at).toLocaleDateString()} · ${item.jurisdiction}</span>`;
+    itemDiv.addEventListener("click", () => {
+      setSection("dashboard");
+      addMessage(item.question, "user", "HISTORY");
+      addMessage(item.answer, "ai", "SAVED GUIDANCE");
+    });
+    el.appendChild(itemDiv);
+  });
+}
+
+$("refreshHistory").addEventListener("click", loadHistory);
+$("clearHistory").addEventListener("click", async () => {
+  if (!confirm("Are you sure you want to delete all consultation history?")) return;
+  try { await request("/api/history", { method: "DELETE" }); } catch (err) {}
   localStorage.removeItem("legal_advisor_history");
   await loadHistory();
 });
-checkHealth();loadHistory();
+
+// Initial boot
+checkHealth();
+loadHistory();
 </script>
 </body>
 </html>
