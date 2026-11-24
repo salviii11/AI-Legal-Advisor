@@ -1,0 +1,29 @@
+# Environment & secrets
+.env
+*.env
+backend/.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+backend/.venv/
+env/
+venv/
+ENV/
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+backend/legal_advisor.db
+
+# Vercel & build
+.vercel
+.cache/
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Legal Advisor</title>
+<style>
+:root{--navy:#111827;--blue:#2563eb;--blue2:#dbeafe;--bg:#f4f7fb;--ink:#172033;--muted:#667085;--line:#e4e9f1;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.layout{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:245px;background:var(--navy);color:white;padding:25px 15px;display:flex;flex-direction:column;z-index:5}
+.brand{font-size:19px;font-weight:750;padding:4px 9px 28px;letter-spacing:-.4px}.brand span{color:#93c5fd}
+.nav{display:grid;gap:7px}.nav button{border:0;border-radius:9px;padding:12px;color:#d1d5db;background:transparent;text-align:left}.nav button:hover,.nav button.active{background:#26364f;color:white}
+.side-note{margin-top:auto;padding:13px;font-size:12px;color:#aebbd0;line-height:1.5;border-top:1px solid #344054}
+main{margin-left:245px;padding:28px;max-width:1600px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px}
+h1{font-size:27px;margin:0 0 6px;letter-spacing:-.6px}h2{font-size:17px;margin:0 0 16px}p{line-height:1.5}.sub{margin:0;color:var(--muted);font-size:14px}
+.btn{border:0;border-radius:9px;background:var(--blue);color:white;padding:11px 15px;font-weight:650}.btn:hover{filter:brightness(.95)}.btn.secondary{background:#eef2ff;color:#243b7a}.btn.ghost{background:white;color:#344054;border:1px solid var(--line)}
+.status{display:inline-flex;align-items:center;gap:7px;background:#ecfdf3;color:#067647;border-radius:99px;padding:7px 10px;font-size:12px;white-space:nowrap}.dot{width:7px;height:7px;background:#12b76a;border-radius:50%}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:18px}.stat,.panel{background:white;border:1px solid var(--line);border-radius:15px;box-shadow:0 3px 12px #17255408}.stat{padding:18px}.stat .label{font-size:13px;color:var(--muted)}.stat strong{display:block;font-size:25px;margin-top:8px}.grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(260px,1fr);gap:17px;align-items:start}.panel{padding:21px;margin-bottom:17px}.chat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.chat-head h2{margin:0}.chat-log{height:350px;overflow:auto;background:#f8fafc;border:1px solid #eef1f6;border-radius:12px;padding:15px}.msg{max-width:88%;padding:12px 14px;border-radius:12px;margin:0 0 12px;white-space:pre-wrap;line-height:1.55;font-size:14px}.msg.ai{background:#e9eef6;color:#253247;border-top-left-radius:4px}.msg.user{background:var(--blue);color:white;margin-left:auto;border-top-right-radius:4px}.msg .meta{display:block;font-size:11px;opacity:.75;margin-bottom:5px}.composer{display:flex;gap:9px;margin-top:12px}.composer textarea{min-height:48px;max-height:140px;resize:vertical;flex:1;padding:13px;border:1px solid #d0d5dd;border-radius:10px;outline-color:#93c5fd}.helper{font-size:12px;color:var(--muted);margin:9px 1px 0}.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{border:1px solid #d9e2f2;background:#f8fbff;border-radius:999px;padding:9px 11px;color:#344054;font-size:12px}.chip:hover{background:var(--blue2)}
+.category{padding:13px 0;border-bottom:1px solid var(--line);display:flex;gap:11px;align-items:flex-start}.category:last-child{border-bottom:0}.cat-icon{width:36px;height:36px;border-radius:10px;background:#eff6ff;display:grid;place-items:center;flex:none}.category b{display:block;font-size:13px;margin:1px 0 4px}.category small{color:var(--muted);line-height:1.4}.upload-zone{background:#f8fbff;border:1.5px dashed #a9c5f5;border-radius:12px;padding:20px;text-align:center}.upload-zone p{font-size:13px;color:var(--muted);margin:7px 0 13px}.file-label{display:inline-block;padding:10px 13px;background:white;border:1px solid var(--line);border-radius:8px;font-size:13px;font-weight:650;cursor:pointer}input[type=file]{display:none}.result{margin-top:13px;background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:12px;display:none;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;max-height:260px;overflow:auto}.history-list{display:grid;gap:10px}.history-item{border:1px solid var(--line);border-radius:10px;padding:12px}.history-item b{font-size:13px}.history-item p{font-size:12px;color:var(--muted);margin:6px 0}.notice{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:13px;border-radius:11px;font-size:12px;line-height:1.5;margin-top:5px}.section{display:none}.section.active{display:block}.muted{color:var(--muted)}.small{font-size:12px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.field{width:100%;padding:11px;border:1px solid #d0d5dd;border-radius:9px;background:white;margin:7px 0 13px}.empty{color:var(--muted);font-size:13px;padding:18px;text-align:center}
+@media(max-width:1000px){.sidebar{width:205px}main{margin-left:205px;padding:20px}.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.sidebar{position:static;width:auto;height:auto;padding:12px}.brand{padding:4px 6px 12px}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;padding:9px 11px;font-size:12px}.side-note{display:none}main{margin:0;padding:15px}.topbar{align-items:flex-start;flex-direction:column}.stats{grid-template-columns:1fr}.stat{padding:14px}.stat strong{font-size:22px}.chat-log{height:320px}.panel{padding:15px}.msg{max-width:96%}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand">⚖ AI <span>Legal Advisor</span></div>
+  <nav class="nav">
+    <button class="active" data-section="dashboard">⌂ &nbsp; Dashboard</button>
+    <button data-section="assistant">✦ &nbsp; Legal Assistant</button>
+    <button data-section="documents">▤ &nbsp; Document Analysis</button>
+    <button data-section="history">◷ &nbsp; Query History</button>
+    <button data-section="settings">⚙ &nbsp; Settings</button>
+  </nav>
+  <div class="side-note">Educational legal information only. Always verify important information with official sources or a qualified lawyer.</div>
+</aside>
+<main>
+  <header class="topbar">
+    <div><h1 id="pageTitle">Good day 👋</h1><p class="sub" id="pageSubtitle">Understand legal information in simple language.</p></div>
+    <div class="row"><span class="status"><span class="dot"></span><span id="apiStatus">Checking backend…</span></span><button class="btn" id="newQuery">＋ New query</button></div>
+  </header>
+
+  <section class="section active" id="dashboard">
+    <div class="stats">
+      <div class="stat"><span class="label">Saved conversations</span><strong id="statQueries">—</strong></div>
+      <div class="stat"><span class="label">AI mode</span><strong id="statMode" style="font-size:18px">Checking…</strong></div>
+      <div class="stat"><span class="label">Document tools</span><strong style="font-size:18px">PDF + TXT</strong></div>
+    </div>
+    <div class="grid">
+      <section class="panel" id="chatPanel">
+        <div class="chat-head"><h2>Legal Assistant</h2><button class="btn ghost" id="clearChat">Clear chat</button></div>
+        <div class="chat-log" id="chatLog" aria-live="polite">
+          <div class="msg ai"><span class="meta">AI LEGAL ADVISOR</span>Hello! Ask a general legal-information question. Select a jurisdiction in Settings if needed. This starter app may use demo mode until you configure an AI provider.</div>
+        </div>
+        <form class="composer" id="chatForm">
+          <textarea id="question" placeholder="Describe your legal question…" rows="2" required maxlength="4000"></textarea>
+          <button class="btn" id="sendButton" type="submit">Send ↗</button>
+        </form>
+        <p class="helper">Do not include passwords, financial account details, or unnecessary personal information.</p>
+        <div class="chips" style="margin-top:13px">
+          <button class="chip" data-prompt="What should I check before signing a rental agreement?">Rental agreement</button>
+          <button class="chip" data-prompt="What steps can a consumer take after receiving a defective product in India?">Consumer rights</button>
+          <button class="chip" data-prompt="Explain the difference between a legal notice and a court order in simple language.">Legal terms</button>
+        </div>
+      </section>
+      <aside>
+        <section class="panel">
+          <h2>Explore legal topics</h2>
+          <div class="category"><div class="cat-icon">📄</div><div><b>Contracts</b><small>Agreements, terms, obligations and clauses</small></div></div>
+          <div class="category"><div class="cat-icon">🛍️</div><div><b>Consumer rights</b><small>Product issues, services and complaints</small></div></div>
+          <div class="category"><div class="cat-icon">💼</div><div><b>Employment</b><small>Workplace policies and employment concepts</small></div></div>
+          <div class="category"><div class="cat-icon">🏠</div><div><b>Property</b><small>Renting, ownership and documentation</small></div></div>
+          <div class="category"><div class="cat-icon">🔐</div><div><b>Cyber law</b><small>Online safety, fraud reporting and privacy</small></div></div>
+        </section>
+        <section class="panel"><h2>Recent queries</h2><div id="recentQueries" class="history-list"><div class="empty">No saved queries yet.</div></div><button class="btn ghost" style="width:100%;margin-top:12px" data-goto="history">View history</button></section>
+      </aside>
+    </div>
+    <div class="notice"><b>Important disclaimer:</b> This application provides general information for educational purposes only. It is not a lawyer, does not establish a lawyer-client relationship, and may be incomplete or inaccurate. Confirm legal information using current official sources and consult a qualified legal professional about your specific situation.</div>
+  </section>
+
+  <section class="section" id="assistant">
+    <section class="panel"><h2>Ask the Legal Assistant</h2><p class="sub">Your questions are sent to your local backend. Without an AI provider configured, the backend returns a clearly labelled demo response.</p><button class="btn" data-goto="dashboard" style="margin-top:15px">Open chat</button></section>
+  </section>
+
+  <section class="section" id="documents">
+    <section class="panel">
+      <h2>Document text extraction</h2>
+      <p class="sub">Upload a PDF or TXT file (maximum 5 MB). This starter extracts readable text only; it does not yet provide a legal opinion or automated clause assessment.</p>
+      <div class="upload-zone" style="margin-top:17px">
+        <div style="font-size:27px">📎</div><b>Select a legal document</b>
+        <p>Supported files: PDF and TXT. Scanned PDFs may not contain extractable text.</p>
+        <label class="file-label" for="documentFile">Choose file</label>
+        <input id="documentFile" type="file" accept=".pdf,.txt">
+        <div id="selectedFile" class="small muted" style="margin-top:10px"></div>
+        <button class="btn" id="extractButton" style="margin-top:12px" disabled>Extract text</button>
+      </div>
+      <div id="documentResult" class="result"></div>
+    </section>
+  </section>
+
+  <section class="section" id="history">
+    <section class="panel">
+      <div class="chat-head"><h2>Query history</h2><button class="btn ghost" id="refreshHistory">Refresh</button></div>
+      <p class="sub" style="margin-bottom:14px">History is stored in a local SQLite database by the backend. It is not user-authenticated in this starter project.</p>
+      <div id="historyList" class="history-list"><div class="empty">Loading history…</div></div>
+      <button class="btn ghost" id="clearHistory" style="margin-top:14px">Delete all local history</button>
+    </section>
+  </section>
+
+  <section class="section" id="settings">
+    <section class="panel">
+      <h2>Application settings</h2>
+      <label for="apiBase" class="small muted">Backend API base URL</label>
+      <input class="field" id="apiBase" placeholder="http://127.0.0.1:8000">
+      <label for="jurisdiction" class="small muted">Preferred jurisdiction</label>
+      <select class="field" id="jurisdiction"><option>India</option><option>United States</option><option>United Kingdom</option><option>Other / not specified</option></select>
+      <button class="btn" id="saveSettings">Save settings</button>
+      <p id="settingsMessage" class="small muted" style="margin-top:12px">Settings are kept for this page session only.</p>
+      <div class="notice" style="margin-top:20px"><b>AI provider setup:</b> configure LLM_API_KEY, LLM_MODEL, and optionally LLM_BASE_URL in backend/.env. Never place API credentials in frontend JavaScript or commit them to a public repository.</div>
+    </section>
+  </section>
+</main>
+</div>
+<script>
+const isLocalFile = window.location.protocol === 'file:';
+const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+// If loaded on local dev server like port 5500, use 127.0.0.1:8000. If hosted on Vercel / Render / Cloud, use same-origin "".
+const DEFAULT_API = (isLocalFile || (isLocalDev && window.location.port !== '8000')) ? "http://127.0.0.1:8000" : "";
+let apiBase = localStorage.getItem("legal_advisor_api") !== null ? localStorage.getItem("legal_advisor_api") : DEFAULT_API;
+let jurisdiction = localStorage.getItem("legal_advisor_jurisdiction") || "India";
+let historyCache = [];
+const $ = id => document.getElementById(id);
+
+function addMessage(text, role="ai", meta="") {
+  const log=$("chatLog"), el=document.createElement("div");
+  el.className="msg "+role;
+  if(meta){const m=document.createElement("span");m.className="meta";m.textContent=meta;el.appendChild(m)}
+  el.appendChild(document.createTextNode(text));
+  log.appendChild(el);log.scrollTop=log.scrollHeight;
+}
+function setSection(name){
+  document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===name));
+  document.querySelectorAll(".nav button[data-section]").forEach(b=>b.classList.toggle("active",b.dataset.section===name));
+  const labels={dashboard:["Good day 👋","Understand legal information in simple language."],assistant:["Legal Assistant","Ask a general legal-information question."],documents:["Document Analysis","Extract readable text from supported documents."],history:["Query History","Review questions and answers stored locally."],settings:["Settings","Configure the backend URL and preferred jurisdiction."]};
+  $("pageTitle").textContent=labels[name][0];$("pageSubtitle").textContent=labels[name][1];
+  if(name==="history") loadHistory();
+  if(name==="assistant") $("question").focus();
+}
+document.querySelectorAll(".nav button[data-section]").forEach(b=>b.addEventListener("click",()=>setSection(b.dataset.section)));
+document.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>setSection(b.dataset.goto)));
+document.querySelectorAll("[data-prompt]").forEach(b=>b.addEventListener("click",()=>{$("question").value=b.dataset.prompt;$("question").focus()}));
+$("newQuery").addEventListener("click",()=>{setSection("dashboard");$("question").value="";$("question").focus()});
+$("clearChat").addEventListener("click",()=>{$("chatLog").innerHTML="";addMessage("Chat cleared. Ask a new question whenever you're ready.")});
+
+$("apiBase").value=apiBase;
+$("jurisdiction").value=jurisdiction;
+$("saveSettings").addEventListener("click",()=>{
+  apiBase=$("apiBase").value.trim().replace(/\/+$/,"");
+  jurisdiction=$("jurisdiction").value;
+  localStorage.setItem("legal_advisor_api", apiBase);
+  localStorage.setItem("legal_advisor_jurisdiction", jurisdiction);
+  $("settingsMessage").textContent="Settings saved successfully!";
+  checkHealth();
+});
+
+async function request(path, options={}) {
+  const response=await fetch(apiBase+path,options);
+  let data={};try{data=await response.json()}catch{}
+  if(!response.ok) throw new Error(data.detail||"Request failed ("+response.status+")");
+  return data;
+}
+async function checkHealth(){
+  try{
+    const d=await request("/api/health");
+    $("apiStatus").textContent="Backend connected";
+    $("statMode").textContent=d.ai_configured?"AI configured":"Demo / AI optional";
+    const dot = document.querySelector(".dot");
+    if(dot) dot.style.background="#12b76a";
+  }catch{
+    $("apiStatus").textContent="Active (Demo Mode)";
+    $("statMode").textContent="Interactive Demo";
+    const dot = document.querySelector(".dot");
+    if(dot) dot.style.background="#3b82f6";
+  }
+}
+
+function getLocalHistory(){
+  try { return JSON.parse(localStorage.getItem("legal_advisor_history") || "[]"); } catch { return []; }
+}
+function saveLocalQuery(question, answer, j, mode){
+  const items = getLocalHistory();
+  items.unshift({ id: Date.now(), question, answer, jurisdiction: j, mode, created_at: new Date().toISOString() });
+  localStorage.setItem("legal_advisor_history", JSON.stringify(items.slice(0, 50)));
+}
+
+function generateLocalAnswer(question, j) {
+  const q = question.toLowerCase();
+  let guidance = "";
+  if (q.includes("rent") || q.includes("tenant") || q.includes("lease") || q.includes("landlord")) {
+    guidance = `• Key Tenancy & Rental Guidance for ${j}:\n  1. Review security deposit clauses, maintenance fees, and refund conditions.\n  2. Standard statutory notice periods typically range from 30 to 90 days.\n  3. Verify whether rent agreements exceeding 11 months require formal registration.\n  4. Conduct an initial inventory check before taking possession.`;
+  } else if (q.includes("consumer") || q.includes("defective") || q.includes("refund") || q.includes("warranty") || q.includes("product")) {
+    guidance = `• Consumer Protection Procedures (${j}):\n  1. Under consumer protection statutes, buyers are entitled to prompt repair, replacement, or refund for defective goods.\n  2. Send a formal written grievance with purchase receipt and photographic proof.\n  3. If unresolved, register an online complaint via the national consumer forum (e.g. e-Daakhil / NCH in India).`;
+  } else if (q.includes("cyber") || q.includes("fraud") || q.includes("scam") || q.includes("upi") || q.includes("hacked")) {
+    guidance = `• Cyber Crime & Financial Fraud Protocol:\n  1. Immediately inform your bank to freeze transactions and card accounts.\n  2. Report immediately to the cyber helpline (dial 1930 or visit cybercrime.gov.in in India).\n  3. Preserve all digital evidence: transaction IDs, SMS notices, URLs, and screenshots.`;
+  } else if (q.includes("notice") || q.includes("court") || q.includes("lawyer") || q.includes("sue")) {
+    guidance = `• Legal Notices vs. Court Proceedings:\n  1. A Legal Notice gives the other party a formal window (usually 15-30 days) to resolve the dispute prior to filing a lawsuit.\n  2. Responding promptly through an advocate establishes your factual defence on record.\n  3. Court orders and injunctions carry legal enforceability.`;
+  } else {
+    guidance = `• General Guidance for ${j}:\n  1. Identify governing statutory provisions and competent regulatory forums.\n  2. Maintain a chronological file of all relevant correspondence, receipts, and documentation.\n  3. Consult an advocate licensed in ${j} for tailored legal advice regarding your specific situation.`;
+  }
+  return `This is an educational response for ${j} jurisdiction:\n\n${guidance}\n\nDisclaimer: This prototype provides educational information only and is not formal legal counsel.`;
+}
+
+$("chatForm").addEventListener("submit",async e=>{
+  e.preventDefault();const q=$("question").value.trim();if(!q)return;
+  addMessage(q,"user","YOU");$("question").value="";$("sendButton").disabled=true;$("sendButton").textContent="…";
+  const waiting=document.createElement("div");waiting.className="msg ai";waiting.textContent="Preparing response…";waiting.id="waiting";$("chatLog").appendChild(waiting);
+  try{
+    const d=await request("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q,jurisdiction})});
+    $("waiting")?.remove();addMessage(d.answer,"ai",d.mode==="llm"?"AI RESPONSE":"BACKEND RESPONSE · "+d.mode.toUpperCase());
+    if(d.sources?.length){d.sources.forEach(s=>addMessage((s.title||"Source")+"\n"+(s.url||""),"ai","SOURCE"))}
+    await loadHistory();await checkHealth();
+  }catch(err){
+    $("waiting")?.remove();
+    const fallbackAnswer = generateLocalAnswer(q, jurisdiction);
+    saveLocalQuery(q, fallbackAnswer, jurisdiction, "demo");
+    addMessage(fallbackAnswer, "ai", "DEMO RESPONSE · " + jurisdiction.toUpperCase());
+    await loadHistory();
+  }finally{$("sendButton").disabled=false;$("sendButton").textContent="Send ↗"}
+});
+
+$("documentFile").addEventListener("change",()=>{
+  const f=$("documentFile").files[0];
+  $("selectedFile").textContent=f?`${f.name} · ${(f.size/1024).toFixed(1)} KB`:"";
+  $("extractButton").disabled=!f;
+  $("documentResult").style.display="none";
+});
+
+$("extractButton").addEventListener("click",async()=>{
+ const f=$("documentFile").files[0];if(!f)return;
+ const btn=$("extractButton");btn.disabled=true;btn.textContent="Extracting…";
+ try{
+   const form=new FormData();form.append("file",f);
+   const d=await request("/api/documents/extract",{method:"POST",body:form});
+   const r=$("documentResult");r.style.display="block";
+   r.textContent=`File: ${d.filename}\nExtracted characters: ${d.characters}\n\n${d.text}\n\nNotice: ${d.notice}`;
+ }catch(err){
+   if(f.name.endsWith(".txt")){
+     const reader = new FileReader();
+     reader.onload = e => {
+       const text = e.target.result || "";
+       const r=$("documentResult");r.style.display="block";
+       r.textContent=`File: ${f.name}\nExtracted characters: ${text.length}\n\n${text.slice(0, 15000)}\n\nNotice: Client-side text preview.`;
+     };
+     reader.readAsText(f);
+   } else {
+     const r=$("documentResult");r.style.display="block";
+     r.textContent="Could not reach backend for PDF extraction. For full PDF OCR/parsing, ensure backend is running or upload a .txt file.";
+   }
+ }finally{btn.disabled=false;btn.textContent="Extract text"}
+});
+
+async function loadHistory(){
+ for(const id of ["historyList","recentQueries"]) if($(id)) $(id).innerHTML='<div class="empty">Loading…</div>';
+ try{
+  const d=await request("/api/history?limit=50");historyCache=d.items||[];$("statQueries").textContent=historyCache.length;
+  renderHistory("historyList",historyCache);renderHistory("recentQueries",historyCache.slice(0,3));
+ }catch(err){
+  const localItems = getLocalHistory();
+  historyCache = localItems;
+  $("statQueries").textContent = localItems.length;
+  renderHistory("historyList", localItems);
+  renderHistory("recentQueries", localItems.slice(0,3));
+ }
+}
+
+function renderHistory(target,items){
+  const el=$(target);el.innerHTML="";
+  if(!items.length){el.innerHTML='<div class="empty">No saved queries yet.</div>';return}
+  items.forEach(item=>{
+   const card=document.createElement("div");card.className="history-item";
+   const q=document.createElement("b");q.textContent=item.question;
+   const p=document.createElement("p");p.textContent=new Date(item.created_at).toLocaleString()+" · "+item.jurisdiction+" · "+item.mode;
+   const btn=document.createElement("button");btn.className="btn ghost";btn.textContent="View answer";btn.addEventListener("click",()=>{setSection("dashboard");addMessage(item.question,"user","HISTORY");addMessage(item.answer,"ai","SAVED RESPONSE")});
+   card.append(q,p,btn);el.appendChild(card);
+  });
+}
+
+$("refreshHistory").addEventListener("click",loadHistory);
+$("clearHistory").addEventListener("click",async()=>{
+  if(!confirm("Delete all query history stored in this app?"))return;
+  try{await request("/api/history",{method:"DELETE"})}catch(err){}
+  localStorage.removeItem("legal_advisor_history");
+  await loadHistory();
+});
+checkHealth();loadHistory();
+</script>
+</body>
+</html>
