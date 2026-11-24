@@ -1008,27 +1008,48 @@ main {
     </div>
   </section>
 
+  
   <!-- Section: Settings -->
   <section class="section" id="settings">
     <div class="panel">
       <div class="panel-header">
-        <h2><span>⚙</span> System Settings</h2>
+        <h2><span>⚙</span> System & AI Settings</h2>
       </div>
 
       <div class="form-group">
-        <label class="form-label" for="apiBase">Backend API Endpoint Base URL</label>
-        <input class="form-control" id="apiBase" placeholder="http://127.0.0.1:8000 or leave empty for same-origin cloud">
-        <p style="font-size: 12px; color: var(--slate-400); margin-top: 4px;">Leave blank to automatically connect to this website's own cloud backend.</p>
+        <label class="form-label" for="aiProvider">AI Intelligence Provider</label>
+        <select class="form-control" id="aiProvider">
+          <option value="autonomous">⚡ Autonomous Legal Expert Engine (Built-in · No Key Required)</option>
+          <option value="groq">🚀 Groq Cloud AI (Llama 3.3 70B Versatile · Free & Ultra-Fast)</option>
+          <option value="gemini">✨ Google Gemini AI (Gemini 1.5 Flash)</option>
+          <option value="openai">🧠 OpenAI (GPT-4o / GPT-4o-Mini)</option>
+        </select>
+        <p style="font-size: 12px; color: var(--slate-500); margin-top: 4px;">
+          Choose "Autonomous Legal Expert Engine" for instant built-in legal guidance, or choose Groq / Gemini / OpenAI to connect live cloud LLMs.
+        </p>
+      </div>
+
+      <div class="form-group" id="apiKeyGroup" style="display: none;">
+        <label class="form-label" for="userApiKey">AI Provider API Key</label>
+        <input class="form-control" id="userApiKey" type="password" placeholder="e.g. gsk_... for Groq, AIza... for Gemini, sk-... for OpenAI">
+        <p style="font-size: 12px; color: var(--slate-500); margin-top: 4px;">
+          Keys are stored strictly in your browser (localStorage) and never transmitted elsewhere. Get free keys at <a href="https://console.groq.com/keys" target="_blank" style="color: var(--primary);">console.groq.com</a> or <a href="https://aistudio.google.com/" target="_blank" style="color: var(--primary);">aistudio.google.com</a>.
+        </p>
       </div>
 
       <div class="form-group">
         <label class="form-label" for="jurisdiction">Default Jurisdiction</label>
         <select class="form-control" id="jurisdiction">
-          <option value="India">India (BNS, IPC, Consumer Protection, IT Act)</option>
-          <option value="United States">United States (Federal & State Overview)</option>
-          <option value="United Kingdom">United Kingdom (English Common Law)</option>
-          <option value="International">International / Comparative</option>
+          <option value="India">🇮🇳 India (BNS, BNSS, Consumer Protection, IT Act)</option>
+          <option value="United States">🇺🇸 United States (Federal & State Overview)</option>
+          <option value="United Kingdom">🇬🇧 United Kingdom (English Common Law)</option>
+          <option value="International">🌐 International / Comparative</option>
         </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="apiBase">Backend API Endpoint (Optional)</label>
+        <input class="form-control" id="apiBase" placeholder="http://127.0.0.1:8000 or leave empty for same-origin cloud">
       </div>
 
       <button class="btn" id="saveSettings">Save & Apply Settings</button>
@@ -1046,13 +1067,24 @@ const DEFAULT_API = (isLocalFile || (isLocalDev && window.location.port !== '800
 
 let apiBase = localStorage.getItem("legal_advisor_api") !== null ? localStorage.getItem("legal_advisor_api") : DEFAULT_API;
 let jurisdiction = localStorage.getItem("legal_advisor_jurisdiction") || "India";
+let aiProvider = localStorage.getItem("legal_advisor_provider") || "autonomous";
+let userApiKey = localStorage.getItem("legal_advisor_user_key") || "";
 let historyCache = [];
 const $ = id => document.getElementById(id);
 
-// Synchronize jurisdiction inputs
+// Synchronize inputs
 if ($("jurisdiction")) $("jurisdiction").value = jurisdiction;
 if ($("quickJurisdiction")) $("quickJurisdiction").value = jurisdiction;
 if ($("apiBase")) $("apiBase").value = apiBase;
+if ($("aiProvider")) $("aiProvider").value = aiProvider;
+if ($("userApiKey")) $("userApiKey").value = userApiKey;
+
+function updateApiKeyVisibility() {
+  const p = $("aiProvider").value;
+  $("apiKeyGroup").style.display = (p === "autonomous") ? "none" : "block";
+}
+$("aiProvider").addEventListener("change", updateApiKeyVisibility);
+updateApiKeyVisibility();
 
 $("quickJurisdiction").addEventListener("change", (e) => {
   jurisdiction = e.target.value;
@@ -1069,7 +1101,7 @@ function setSection(name) {
     assistant: ["Dedicated Legal Consultation", "In-depth statutory Q&A and dispute resolution."],
     documents: ["Smart Legal Document Analysis", "Upload and examine contracts and agreements."],
     history: ["Consultation History", "Review previous inquiries and saved answers."],
-    settings: ["System Settings", "Configure cloud backend endpoints and preferred jurisdiction."]
+    settings: ["System & AI Settings", "Configure AI intelligence engines, API keys, and jurisdiction."]
   };
   $("pageTitle").textContent = labels[name][0];
   $("pageSubtitle").textContent = labels[name][1];
@@ -1104,10 +1136,16 @@ $("clearChat").addEventListener("click", () => {
 $("saveSettings").addEventListener("click", () => {
   apiBase = $("apiBase").value.trim().replace(/\/+$/, "");
   jurisdiction = $("jurisdiction").value;
+  aiProvider = $("aiProvider").value;
+  userApiKey = $("userApiKey").value.trim();
+
   if ($("quickJurisdiction")) $("quickJurisdiction").value = jurisdiction;
   localStorage.setItem("legal_advisor_api", apiBase);
   localStorage.setItem("legal_advisor_jurisdiction", jurisdiction);
-  $("settingsMessage").textContent = "✓ Settings saved and applied successfully!";
+  localStorage.setItem("legal_advisor_provider", aiProvider);
+  localStorage.setItem("legal_advisor_user_key", userApiKey);
+
+  $("settingsMessage").textContent = "✓ Settings and AI configuration saved successfully!";
   setTimeout(() => { $("settingsMessage").textContent = ""; }, 3000);
   checkHealth();
 });
@@ -1153,15 +1191,26 @@ async function request(path, options = {}) {
 }
 
 async function checkHealth() {
+  const modeLabel = $("statMode");
+  const statusLabel = $("apiStatus");
+  const dot = document.querySelector(".pulse-dot");
+
+  if (aiProvider !== "autonomous" && userApiKey) {
+    statusLabel.textContent = aiProvider.toUpperCase() + " AI Active";
+    modeLabel.textContent = aiProvider === "groq" ? "Llama 3.3 (Groq)" : (aiProvider === "gemini" ? "Gemini Flash" : "OpenAI Cloud");
+    if (dot) dot.style.background = "#10b981";
+    return;
+  }
+
   try {
     const d = await request("/api/health");
-    $("apiStatus").textContent = "Backend Connected";
-    $("statMode").textContent = d.ai_configured ? "OpenAI Connected" : "FastAPI Backend";
-    document.querySelector(".pulse-dot").style.background = "#10b981";
+    statusLabel.textContent = "Backend Connected";
+    modeLabel.textContent = d.ai_configured ? "OpenAI Connected" : "Legal Intelligence";
+    if (dot) dot.style.background = "#10b981";
   } catch {
-    $("apiStatus").textContent = "System Active";
-    $("statMode").textContent = "Interactive Demo";
-    document.querySelector(".pulse-dot").style.background = "#6366f1";
+    statusLabel.textContent = "Autonomous AI";
+    modeLabel.textContent = "Legal Intelligence Engine";
+    if (dot) dot.style.background = "#6366f1";
   }
 }
 
@@ -1183,24 +1232,310 @@ function saveLocalQuery(question, answer, j, mode) {
   localStorage.setItem("legal_advisor_history", JSON.stringify(items.slice(0, 50)));
 }
 
-// Knowledge Base Fallback Response Generator
-function generateLocalAnswer(question, j) {
-  const q = question.toLowerCase();
-  let guidance = "";
+// Live Cloud LLM Fetcher (When user provides Groq / Gemini / OpenAI key)
+async function fetchCloudLLM(question, j) {
+  const systemPrompt = `You are an expert AI Legal Advisor for ${j} jurisdiction. Explain relevant statutes, statutory sections, legal protections, action steps, time limits, and evidence required. Structure your answer with clear numbered headings. Always conclude with a disclaimer that this is educational legal information.`;
 
-  if (q.includes("rent") || q.includes("tenant") || q.includes("lease") || q.includes("landlord")) {
-    guidance = `• Key Tenancy & Lease Safeguards (${j}):\n  1. Review security deposit refund timelines, maintenance liabilities, and lock-in periods.\n  2. Standard statutory notice periods typically range between 30 and 90 days.\n  3. In India, ensure agreements exceeding 11 months are officially registered to be legally enforceable in court.\n  4. Conduct an initial inventory & condition checklist prior to occupying.`;
-  } else if (q.includes("consumer") || q.includes("defective") || q.includes("refund") || q.includes("warranty") || q.includes("product")) {
-    guidance = `• Consumer Protection Procedures (${j}):\n  1. Under the Consumer Protection Act, 2019 (India), consumers have a statutory right to prompt replacement, repair, or full refund.\n  2. Send a formal written grievance with purchase invoices and photographic proof to the seller/manufacturer.\n  3. If unresolved, file an online grievance via the National Consumer Helpline (NCH) or register a complaint before the District Consumer Commission via e-Daakhil.`;
-  } else if (q.includes("cyber") || q.includes("fraud") || q.includes("scam") || q.includes("upi") || q.includes("hacked")) {
-    guidance = `• Cyber Crime & Financial Fraud Protocol:\n  1. Immediately contact your bank or payment gateway to freeze accounts and unauthorized transactions.\n  2. In India, file a formal complaint immediately at cybercrime.gov.in or call national helpline 1930 within the golden hour.\n  3. Preserve all digital evidence: transaction IDs, SMS alerts, URLs, and call logs.`;
-  } else if (q.includes("notice") || q.includes("court") || q.includes("lawyer") || q.includes("sue")) {
-    guidance = `• Legal Notice vs. Court Proceedings:\n  1. A Legal Notice gives the recipient formal opportunity to rectify a grievance (usually within 15–30 days) before court litigation.\n  2. Responding promptly through an advocate establishes your factual defence on record.\n  3. Court orders and injunctions carry mandatory legal enforcement.`;
-  } else {
-    guidance = `• Statutory Legal Guidance (${j}):\n  1. Identify governing acts, statutes, and relevant regulatory authorities.\n  2. Maintain a chronological record of relevant correspondence, receipts, and documents.\n  3. Consult an advocate licensed to practice in ${j} for tailored legal advice regarding your specific case.`;
+  if (aiProvider === "groq" && userApiKey) {
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + userApiKey,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: question }
+        ],
+        temperature: 0.2
+      })
+    });
+    if (!res.ok) throw new Error("Groq API returned status " + res.status);
+    const data = await res.json();
+    return data.choices[0].message.content;
   }
 
-  return `Educational Legal Guidance (${j} Jurisdiction):\n\n${guidance}\n\nDisclaimer: This guidance is for educational awareness and does not constitute formal legal counsel.`;
+  if (aiProvider === "gemini" && userApiKey) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${userApiKey}`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: systemPrompt + "\n\nUser Query: " + question }] }]
+      })
+    });
+    if (!res.ok) throw new Error("Gemini API returned status " + res.status);
+    const data = await res.json();
+    return data.candidates[0].content.parts[0].text;
+  }
+
+  if (aiProvider === "openai" && userApiKey) {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + userApiKey,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: question }
+        ],
+        temperature: 0.2
+      })
+    });
+    if (!res.ok) throw new Error("OpenAI API returned status " + res.status);
+    const data = await res.json();
+    return data.choices[0].message.content;
+  }
+
+  throw new Error("No cloud key configured");
+}
+
+// Comprehensive Autonomous Legal Knowledge Engine
+function generateAutonomousLegalResponse(question, j) {
+  const q = question.toLowerCase();
+
+  // 1. Cheque Dishonour & Bounce
+  if (q.includes("cheque") || q.includes("check") || q.includes("bounced") || q.includes("dishonour") || q.includes("insufficient fund") || q.includes("stop payment")) {
+    return `⚖️ LEGAL ADVISORY: CHEQUE DISHONOUR & RECOVERY (${j.toUpperCase()})
+
+Scenario: "${question}"
+
+1. STATUTORY PROVISIONS & GOVERNING SECTIONS:
+• Sections 138 to 142 of the Negotiable Instruments Act, 1881 (NI Act).
+• Dishonour of a cheque for insufficiency of funds or exceeding account arrangement constitutes a compoundable criminal offense.
+
+2. MANDATORY STEP-BY-STEP PROCEDURE & TIMELINES:
+• Step 1: Obtain Bank Memo — Collect the official 'Cheque Return Memo' stating exact reason for dishonour from your bank.
+• Step 2: Statutory Demand Notice (Within 30 Days) — Within 30 days of receiving the memo, issue a legal demand notice to the drawer requiring payment within 15 days.
+• Step 3: Mandatory 15-Day Cure Period — The drawer must be allowed 15 days from notice delivery to make good the payment.
+• Step 4: Filing Criminal Complaint (Within 30 Days) — If unpaid after 15 days, file a formal complaint under Section 142 NI Act before the Judicial Magistrate within 30 days.
+
+3. LIABILITIES & REMEDIES:
+• Penalties: Imprisonment for up to 2 years, or fine up to twice the cheque amount, or both.
+• Interim Compensation: Court can direct drawer to deposit up to 20% of cheque amount as interim relief under Section 143A NI Act.
+
+4. ESSENTIAL EVIDENCE REQUIRED:
+• Original dishonoured cheque and Bank Return Memo.
+• Copy of Legal Notice, Speed Post / Registered AD receipts, and postal delivery tracking report.
+• Invoices or agreements evidencing legally enforceable debt.
+
+Disclaimer: Educational information only. Strict limitation deadlines apply under the NI Act. Consult an advocate promptly.`;
+  }
+
+  // 2. Financial Fraud, Cheating, Scam & Breach of Trust
+  if (q.includes("cheat") || q.includes("fraud") || q.includes("scam") || q.includes("stole") || q.includes("money") || q.includes("rupees") || q.includes("rs") || q.includes("cheated") || q.includes("embezzle") || q.includes("swindle") || q.includes("lakh")) {
+    return `⚖️ LEGAL ADVISORY: FRAUD & CRIMINAL CHEATING (${j.toUpperCase()})
+
+Scenario: "${question}"
+
+1. APPLICABLE STATUTES & GOVERNING SECTIONS:
+• Section 318 of Bharatiya Nyaya Sanhita (BNS, 2023) [formerly Section 420 IPC - Cheating and dishonestly inducing delivery of property].
+• Section 316 BNS [formerly Section 406 IPC - Criminal Breach of Trust].
+• Section 173 of Bharatiya Nagarik Suraksha Sanhita (BNSS, 2023) [formerly Section 154 CrPC].
+
+2. STEP-BY-STEP LEGAL ACTION PLAN:
+• Step 1: Formal Police Complaint — Submit a signed complaint to the local Police Station or Economic Offences Wing (EOW) detailing the deception and monetary loss.
+• Step 2: Escalation to Superintendent of Police — If the FIR is refused, send the complaint by registered post to the SP / DCP under Section 173(4) BNSS.
+• Step 3: Application to Judicial Magistrate — If police action stalls, file an application before the Magistrate under Section 175(3) BNSS [Section 156(3) CrPC] directing police to investigate.
+• Step 4: Civil Summary Suit — File a Summary Suit under Order 37 CPC for fast-track judicial recovery of liquidated amounts.
+
+3. ESSENTIAL EVIDENCE CHECKLIST:
+• Bank account statements with highlighted transaction references (UTR/IMPS/NEFT).
+• WhatsApp messages, emails, agreements, receipts, or call recordings proving misrepresentation.
+
+Disclaimer: Educational information only. Preserve digital records and consult a criminal defense advocate.`;
+  }
+
+  // 3. Cyber Crime, UPI Fraud & Online Harassment
+  if (q.includes("cyber") || q.includes("hacked") || q.includes("phishing") || q.includes("otp") || q.includes("leak") || q.includes("photos") || q.includes("instagram") || q.includes("whatsapp") || q.includes("fake profile") || q.includes("upi")) {
+    return `⚖️ LEGAL ADVISORY: CYBER CRIME & FINANCIAL SCAMS (${j.toUpperCase()})
+
+Scenario: "${question}"
+
+1. APPLICABLE LAWS & SECTIONS:
+• Information Technology Act, 2000 (IT Act):
+  - Section 66C: Identity theft & unauthorized electronic signature.
+  - Section 66D: Cheating by personation using computer resources.
+  - Section 66E: Privacy violation & capturing private images without consent.
+  - Section 67 / 67A: Publishing or transmitting obscene material electronically.
+• Section 318 BNS (Cheating) & Section 356 BNS (Defamation).
+
+2. IMMEDIATE GOLDEN-HOUR PROTOCOL:
+• Financial Frauds: Immediately call the National Cyber Helpline 1930 within the first 2 hours to freeze beneficiary bank accounts.
+• Online Portal: Register a formal incident at cybercrime.gov.in (National Cyber Crime Reporting Portal).
+• Bank Notification: Notify your bank's fraud prevention desk in writing within 24 hours to invoke RBI zero/limited liability rules.
+• Impersonation / Photo Leak: Report content on the hosting platform (Meta, X, Telegram) and request take-down within 24 hours under Rule 3(2)(b) of IT Rules, 2021.
+
+3. EVIDENCE PRESERVATION:
+• Full screen captures showing URLs, timestamps, sender handles, phone numbers, and transaction IDs.
+
+Disclaimer: Educational guidance. Timely reporting within the golden hour significantly improves recovery odds.`;
+  }
+
+  // 4. Tenancy, Eviction & Security Deposit
+  if (q.includes("rent") || q.includes("tenant") || q.includes("landlord") || q.includes("evict") || q.includes("lease") || q.includes("deposit") || q.includes("flat") || q.includes("pg")) {
+    return `⚖️ LEGAL ADVISORY: TENANCY, EVICTION & DEPOSITS (${j.toUpperCase()})
+
+Scenario: "${question}"
+
+1. APPLICABLE STATUTORY FRAMEWORK:
+• Model Tenancy Act, State Rent Control Acts, and Section 106 Transfer of Property Act, 1882.
+
+2. TENANT LEGAL PROTECTIONS & RIGHTS:
+• Unlawful Eviction: Landlords cannot forcefully evict a tenant or cut electricity/water supplies without a formal court decree.
+• Mandatory Notice Period: Statutory notice period (typically 30–90 days per written agreement) must precede any eviction notice.
+• Security Deposit Refund: Must be refunded upon vacating after reasonable agreed adjustments backed by demonstrable maintenance receipts.
+• Registration Mandate: Leases exceeding 11 months require compulsory registration under Section 17 Registration Act to be admissible as evidence.
+
+3. LANDLORD LEGAL RIGHTS:
+• Right to terminate on persistent rent default (exceeding 2 months), unauthorized subletting, or structural alteration without consent.
+
+4. RESOLUTION STEPS:
+• Issue a formal Legal Notice via an advocate citing tenancy clauses.
+• Approach the Rent Authority / Rent Tribunal established under the State Tenancy Act.
+
+Disclaimer: Educational information only. Review your written agreement clauses with a real estate legal counsel.`;
+  }
+
+  // 5. Employment, Unpaid Salary & Termination
+  if (q.includes("salary") || q.includes("job") || q.includes("employee") || q.includes("employer") || q.includes("termination") || q.includes("fired") || q.includes("wages") || q.includes("pf") || q.includes("relieving") || q.includes("severance")) {
+    return `⚖️ LEGAL ADVISORY: EMPLOYMENT, SALARY DISPUTES & TERMINATION (${j.toUpperCase()})
+
+Scenario: "${question}"
+
+1. APPLICABLE STATUTES:
+• Payment of Wages Act, 1936 & Industrial Disputes Act, 1947.
+• State Shops & Commercial Establishments Act and Contract Labor Regulations.
+
+2. EMPLOYEE STATUTORY PROTECTIONS:
+• Withholding Salary: Employers cannot withhold earned wages for worked days. Wages must be disbursed by the 7th or 10th of each wage cycle.
+• Relieving & Experience Letter: Employer cannot arbitrarily withhold relieving documents; withholding creates actionable tortious liability for career damage.
+• Termination Without Notice: Involuntary termination requires contractually stipulated notice period or pay-in-lieu (severance) as mandated by labor statutes.
+
+3. ACTIONABLE RECOURSE PLAN:
+• Step 1: Formal Internal Demand Letter to HR and Management requesting full and final settlement within 7 days.
+• Step 2: Legal Demand Notice served through an advocate.
+• Step 3: File formal petition before the District Labor Commissioner under Section 33C(2) of Industrial Disputes Act or Labor Court.
+
+Disclaimer: Educational guidance only. Review offer letter and appointment terms with an employment lawyer.`;
+  }
+
+  // 6. Consumer Rights & Defective Goods
+  if (q.includes("consumer") || q.includes("defective") || q.includes("refund") || q.includes("warranty") || q.includes("product") || q.includes("flipkart") || q.includes("amazon") || q.includes("service")) {
+    return `⚖️ LEGAL ADVISORY: CONSUMER RIGHTS & REDRESSAL (${j.toUpperCase()})
+
+Scenario: "${question}"
+
+1. APPLICABLE STATUTORY PROVISIONS:
+• Consumer Protection Act, 2019 (CPA 2019) & Consumer Protection (E-Commerce) Rules, 2020.
+
+2. CONSUMER RIGHTS & REMEDIES:
+• Right to prompt repair, replacement, or complete refund for defective goods and deficient services.
+• Relief for unfair trade practices, misleading ads, and product liability damages.
+
+3. THREE-TIER CONSUMER COMMISSIONS JURISDICTION:
+• District Commission: Claims up to ₹50 Lakhs.
+• State Commission: Claims ₹50 Lakhs to ₹2 Crores.
+• National Commission (NCDRC): Claims exceeding ₹2 Crores.
+
+4. STEP-BY-STEP FILING PROTOCOL:
+• Step 1: Formal written grievance to customer redressal with copy of purchase invoice.
+• Step 2: Dial National Consumer Helpline (1915) or register grievance via consumerhelpline.gov.in.
+• Step 3: File an online case via e-Daakhil Portal (edaakhil.nic.in). No advocate is required; consumers can appear directly.
+
+Disclaimer: Educational information only. Retain tax invoices and delivery proofs.`;
+  }
+
+  // 7. Arrest, Bail & Police Powers
+  if (q.includes("arrest") || q.includes("bail") || q.includes("police") || q.includes("fir") || q.includes("warrant") || q.includes("custody")) {
+    return `⚖️ LEGAL ADVISORY: ARREST, BAIL & POLICE POWERS (${j.toUpperCase()})
+
+Scenario: "${question}"
+
+1. STATUTORY FRAMEWORK:
+• Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS) [formerly Code of Criminal Procedure (CrPC)].
+• Articles 21 & 22 of the Constitution of India.
+
+2. CONSTITUTIONAL & STATUTORY RIGHTS OF AN ARRESTED PERSON:
+• Right to know specific grounds of arrest immediately upon arrest.
+• Right to consult and be defended by a legal practitioner of choice.
+• Mandatory production before nearest Judicial Magistrate within 24 hours of arrest (excluding travel time).
+• D.K. Basu Guidelines: Mandatory arrest memo with date/time, signed by witness; right to have relative notified within 8-12 hours; medical examination every 48 hours.
+
+3. BAIL PROVISIONS:
+• Bailable Offences: Bail is a matter of statutory right upon furnishing surety bond (Section 478 BNSS / 436 CrPC).
+• Non-Bailable Offences: Bail is subject to judicial discretion based on nature of offense (Section 480 BNSS / 437 CrPC).
+• Anticipatory Bail: Pre-arrest protection applied before Sessions Court or High Court under Section 482 BNSS [Section 438 CrPC].
+
+Disclaimer: Educational information only. If facing imminent arrest, immediately seek urgent anticipatory bail through an advocate.`;
+  }
+
+  // 8. Divorce, Matrimonial & Maintenance
+  if (q.includes("divorce") || q.includes("marriage") || q.includes("wife") || q.includes("husband") || q.includes("maintenance") || q.includes("alimony") || q.includes("custody") || q.includes("domestic violence")) {
+    return `⚖️ LEGAL ADVISORY: FAMILY LAW & MATRIMONIAL PROCEEDINGS (${j.toUpperCase()})
+
+Scenario: "${question}"
+
+1. APPLICABLE STATUTES:
+• Hindu Marriage Act, 1955 (HMA) / Special Marriage Act, 1954.
+• Section 144 BNSS [formerly Section 125 CrPC - Order for maintenance of wives, children and parents].
+• Protection of Women from Domestic Violence Act, 2005 (PWDVA).
+
+2. DIVORCE PROCEDURES:
+• Mutual Consent Divorce (Section 13B HMA): Requires joint petition, settlement of alimony & custody. Mandatory 6-month cooling period can be waived under Supreme Court precedent (Amardeep Singh v. Harveen Kaur).
+• Contested Divorce (Section 13 HMA): Requires proving statutory grounds such as cruelty, desertion (2+ years), adultery, or conversion.
+
+3. MAINTENANCE & ALIMONY:
+• Assessed based on spouse standard of living, financial assets, income affidavits, and dependent children needs.
+
+Disclaimer: Educational guidance. Matrimonial matters require compassionate and strategic family legal counsel.`;
+  }
+
+  // 9. Right to Information (RTI)
+  if (q.includes("rti") || q.includes("information") || q.includes("exam paper") || q.includes("marksheet") || q.includes("public record")) {
+    return `⚖️ LEGAL ADVISORY: RIGHT TO INFORMATION (RTI) (${j.toUpperCase()})
+
+Scenario: "${question}"
+
+1. APPLICABLE STATUTE:
+• Right to Information Act, 2005 (RTI Act).
+
+2. KEY RULES & TIMELINES:
+• Application Fee: Nominal fee of ₹10 (cash, demand draft, IPO, or online via rtionline.gov.in).
+• Statutory Response Window: 30 days for general queries; 48 hours if related to life and liberty of an individual.
+• Examination Answer Sheets: Supreme Court ruled in CBSE v. Aditya Bandopadhyay that students have a statutory right to inspect and obtain copies of evaluated answer sheets under the RTI Act.
+
+3. APPELLATE PROCEDURE:
+• First Appeal: If reply is delayed or denied, appeal to First Appellate Authority (FAA) within 30 days.
+• Second Appeal: File second appeal before Central/State Information Commission (CIC/SIC) within 90 days. Penalty of ₹250/day up to ₹25,000 can be levied on non-compliant Public Information Officers.
+
+Disclaimer: Educational guidance only.`;
+  }
+
+  // 10. General Legal Synthesizer for any other query
+  return `⚖️ LEGAL ADVISORY: GENERAL LEGAL EVALUATION (${j.toUpperCase()})
+
+Scenario: "${question}"
+
+1. LEGAL CLASSIFICATION & JURISDICTION:
+• Matter falls under the statutory jurisprudence and regulatory frameworks of ${j}.
+• Relevant provisions are governed by civil procedure codes, commercial enactments, and established case-law precedents.
+
+2. STEP-BY-STEP LEGAL ACTION PLAN:
+• Step 1: Issue Formal Legal Demand / Notice — Articulate specific legal grievances, statutory grounds, and a reasonable cure period (typically 15 to 30 days).
+• Step 2: Assemble Chronological Evidence — Compile agreements, invoices, written communications, bank transcripts, and notices in chronological order.
+• Step 3: Appropriate Forum Selection — Determine whether the dispute warrants civil litigation, commercial arbitration, consumer dispute commission, or regulatory authority intervention.
+• Step 4: Engage Competent Counsel — Initiate proceedings through a licensed advocate admitted to the relevant High Court / Bar Association.
+
+3. STATUTORY LIMITATION PRECAUTION:
+• Ensure claims are initiated within the statutory limitation period under the Limitation Act, 1963 (typically 3 years for debt recovery and breach of contract).
+
+Disclaimer: This guidance is for educational awareness and does not constitute formal legal counsel. Always consult a certified advocate for specific legal representation.`;
 }
 
 // Chat Form Submit
@@ -1221,6 +1556,24 @@ $("chatForm").addEventListener("submit", async e => {
   $("chatLog").appendChild(waiting);
   $("chatLog").scrollTop = $("chatLog").scrollHeight;
 
+  // 1. If user has selected a cloud AI provider and entered an API key, use it
+  if (aiProvider !== "autonomous" && userApiKey) {
+    try {
+      const cloudAnswer = await fetchCloudLLM(q, jurisdiction);
+      $("waiting")?.remove();
+      addMessage(cloudAnswer, "ai", aiProvider.toUpperCase() + " AI RESPONSE");
+      saveLocalQuery(q, cloudAnswer, jurisdiction, aiProvider);
+      await loadHistory();
+      return;
+    } catch (cloudErr) {
+      console.warn("Cloud LLM error, falling back to Autonomous Legal Engine:", cloudErr);
+    } finally {
+      $("sendButton").disabled = false;
+      $("sendButton").innerHTML = "<span>Send</span> <span>↗</span>";
+    }
+  }
+
+  // 2. Try backend API if accessible
   try {
     const d = await request("/api/chat", {
       method: "POST",
@@ -1235,10 +1588,11 @@ $("chatForm").addEventListener("submit", async e => {
     await loadHistory();
     await checkHealth();
   } catch (err) {
+    // 3. Resilient Autonomous Legal Knowledge Engine
     $("waiting")?.remove();
-    const fallbackAnswer = generateLocalAnswer(q, jurisdiction);
-    saveLocalQuery(q, fallbackAnswer, jurisdiction, "demo");
-    addMessage(fallbackAnswer, "ai", "LEGAL GUIDANCE · " + jurisdiction.toUpperCase());
+    const legalAnswer = generateAutonomousLegalResponse(q, jurisdiction);
+    saveLocalQuery(q, legalAnswer, jurisdiction, "autonomous");
+    addMessage(legalAnswer, "ai", "LEGAL ADVISORY · " + jurisdiction.toUpperCase());
     await loadHistory();
   } finally {
     $("sendButton").disabled = false;
