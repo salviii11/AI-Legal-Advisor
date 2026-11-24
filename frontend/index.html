@@ -6,41 +6,44 @@
 <title>AI Legal Advisor — Intelligent Legal Information System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  --primary-light: #eef2ff;
-  --primary-border: #c7d2fe;
+  --primary: #4338ca;
+  --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+  --primary-light: #e0e7ff;
+  --primary-border: #a5b4fc;
+  --accent-cyan: #06b6d4;
+  --slate-950: #090d16;
   --slate-900: #0f172a;
+  --slate-850: #131c31;
   --slate-800: #1e293b;
   --slate-700: #334155;
   --slate-600: #475569;
   --slate-500: #64748b;
   --slate-400: #94a3b8;
+  --slate-300: #cbd5e1;
   --slate-200: #e2e8f0;
   --slate-100: #f1f5f9;
   --slate-50: #f8fafc;
-  --emerald: #10b981;
+  --emerald: #059669;
   --emerald-light: #ecfdf5;
-  --amber: #f59e0b;
+  --amber: #d97706;
   --amber-light: #fffbeb;
-  --card-bg: #ffffff;
+  --rose: #e11d48;
   --radius-xl: 18px;
   --radius-lg: 12px;
   --radius-md: 8px;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-  --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-  --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.04);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08);
+  --shadow-md: 0 4px 14px -2px rgb(0 0 0 / 0.08), 0 2px 6px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 12px 28px -4px rgb(0 0 0 / 0.12), 0 4px 10px -2px rgb(0 0 0 / 0.06);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #f4f6fa;
+  background: #f0f3f8;
   color: var(--slate-800);
   line-height: 1.6;
   min-height: 100vh;
@@ -52,45 +55,44 @@ button, input, select, textarea {
   font-size: inherit;
 }
 
-/* App Layout */
 .layout {
   display: flex;
   min-height: 100vh;
 }
 
-/* Sidebar Styling */
+/* Sidebar */
 .sidebar {
   position: fixed;
   inset: 0 auto 0 0;
   width: 260px;
-  background: linear-gradient(180deg, #0b1120 0%, #0f172a 100%);
+  background: linear-gradient(180deg, var(--slate-950) 0%, var(--slate-900) 100%);
   color: white;
   padding: 24px 16px;
   display: flex;
   flex-direction: column;
   z-index: 50;
   border-right: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
 }
 
 .brand-wrapper {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 12px 28px;
+  padding: 6px 12px 24px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   margin-bottom: 20px;
 }
 
 .brand-icon {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-  border-radius: 10px;
+  width: 42px;
+  height: 42px;
+  background: var(--primary-gradient);
+  border-radius: 12px;
   display: grid;
   place-items: center;
-  font-size: 20px;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  font-size: 22px;
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.4);
 }
 
 .brand-text h2 {
@@ -105,7 +107,7 @@ button, input, select, textarea {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  color: #818cf8;
+  color: #a5b4fc;
   font-weight: 700;
 }
 
@@ -147,7 +149,7 @@ button, input, select, textarea {
 }
 
 .nav button.active {
-  background: linear-gradient(90deg, rgba(79, 70, 229, 0.25) 0%, rgba(99, 102, 241, 0.15) 100%);
+  background: linear-gradient(90deg, rgba(79, 70, 229, 0.3) 0%, rgba(99, 102, 241, 0.15) 100%);
   color: #fff;
   border-left: 3px solid #818cf8;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -175,15 +177,14 @@ button, input, select, textarea {
   align-items: center;
   gap: 6px;
   margin-bottom: 4px;
-  font-size: 12px;
 }
 
-/* Main Content Area */
+/* Main Surface */
 main {
   margin-left: 260px;
   padding: 32px 40px;
   flex: 1;
-  max-width: 1440px;
+  max-width: 1480px;
 }
 
 /* Topbar */
@@ -192,7 +193,7 @@ main {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
 }
 
@@ -216,7 +217,6 @@ main {
   flex-wrap: wrap;
 }
 
-/* Jurisdiction Dropdown in Topbar */
 .jurisdiction-pill {
   display: flex;
   align-items: center;
@@ -240,7 +240,6 @@ main {
   cursor: pointer;
 }
 
-/* Status Pill */
 .status-pill {
   display: inline-flex;
   align-items: center;
@@ -270,6 +269,50 @@ main {
   100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
 }
 
+/* Category Quick-Select Pills Bar */
+.category-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 14px;
+  margin-bottom: 20px;
+  scrollbar-width: none;
+}
+.category-pills-bar::-webkit-scrollbar { display: none; }
+
+.cat-pill {
+  border: 1px solid var(--slate-200);
+  background: white;
+  color: var(--slate-700);
+  padding: 9px 15px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 650;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cat-pill:hover {
+  background: var(--primary-light);
+  border-color: var(--primary-border);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.cat-pill.active {
+  background: var(--primary-gradient);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+}
+
 /* Buttons */
 .btn {
   display: inline-flex;
@@ -278,7 +321,7 @@ main {
   gap: 8px;
   border: 0;
   border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  background: var(--primary-gradient);
   color: white;
   padding: 11px 18px;
   font-weight: 600;
@@ -293,10 +336,6 @@ main {
   box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
 }
 
-.btn:active {
-  transform: translateY(0);
-}
-
 .btn.secondary {
   background: white;
   color: var(--slate-700);
@@ -307,7 +346,7 @@ main {
 .btn.secondary:hover {
   background: var(--slate-50);
   border-color: var(--slate-300);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-md);
 }
 
 .btn.ghost {
@@ -360,9 +399,9 @@ main {
   flex-shrink: 0;
 }
 
-.stat-icon.blue { background: #eff6ff; color: #2563eb; }
 .stat-icon.indigo { background: #eef2ff; color: #4f46e5; }
 .stat-icon.emerald { background: #ecfdf5; color: #059669; }
+.stat-icon.cyan { background: #ecfeff; color: #0891b2; }
 
 .stat-content .label {
   font-size: 13px;
@@ -374,14 +413,14 @@ main {
 
 .stat-content strong {
   display: block;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 800;
   color: var(--slate-900);
   margin-top: 4px;
   letter-spacing: -0.4px;
 }
 
-/* Main Dashboard Grid */
+/* Dashboard Grid */
 .dashboard-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.8fr) minmax(320px, 1fr);
@@ -389,7 +428,6 @@ main {
   align-items: start;
 }
 
-/* Panels */
 .panel {
   background: white;
   border: 1px solid rgba(226, 232, 240, 0.9);
@@ -404,7 +442,7 @@ main {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .panel-header h2 {
@@ -423,7 +461,7 @@ main {
   border: 1px solid var(--slate-200);
   border-radius: var(--radius-lg);
   padding: 20px;
-  height: 380px;
+  height: 400px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -431,11 +469,11 @@ main {
 }
 
 .chat-bubble {
-  max-width: 86%;
-  padding: 15px 18px;
+  max-width: 90%;
+  padding: 16px 20px;
   border-radius: 16px;
   font-size: 14.5px;
-  line-height: 1.6;
+  line-height: 1.65;
   white-space: pre-wrap;
   position: relative;
   word-break: break-word;
@@ -443,19 +481,19 @@ main {
 
 .chat-bubble.ai {
   background: white;
-  color: var(--slate-800);
+  color: var(--slate-850);
   border: 1px solid var(--slate-200);
   border-top-left-radius: 4px;
   align-self: flex-start;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 .chat-bubble.user {
-  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  background: var(--primary-gradient);
   color: white;
   border-top-right-radius: 4px;
   align-self: flex-end;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
 }
 
 .chat-bubble .meta {
@@ -465,25 +503,33 @@ main {
   gap: 8px;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
   text-transform: uppercase;
-  margin-bottom: 6px;
-  opacity: 0.75;
+  margin-bottom: 8px;
+  opacity: 0.85;
+}
+
+.chat-bubble.ai .meta {
+  color: var(--primary);
+  border-bottom: 1px solid var(--slate-100);
+  padding-bottom: 6px;
 }
 
 .copy-btn {
-  background: transparent;
-  border: none;
-  font-size: 12px;
+  background: #f1f5f9;
+  border: 1px solid var(--slate-200);
+  font-size: 11.5px;
   cursor: pointer;
-  color: var(--slate-500);
-  padding: 2px 6px;
-  border-radius: 4px;
+  color: var(--slate-700);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 600;
   transition: all 0.2s;
 }
 
 .copy-btn:hover {
-  background: var(--slate-100);
+  background: var(--primary-light);
+  border-color: var(--primary-border);
   color: var(--primary);
 }
 
@@ -494,7 +540,7 @@ main {
   gap: 12px;
   align-items: flex-end;
   background: white;
-  border: 1.5px solid var(--slate-200);
+  border: 1.5px solid var(--slate-300);
   border-radius: var(--radius-lg);
   padding: 8px 12px;
   box-shadow: var(--shadow-sm);
@@ -502,7 +548,7 @@ main {
 }
 
 .composer-box:focus-within {
-  border-color: #818cf8;
+  border-color: #6366f1;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
@@ -511,7 +557,7 @@ main {
   border: none;
   outline: none;
   resize: none;
-  min-height: 48px;
+  min-height: 52px;
   max-height: 140px;
   font-size: 14.5px;
   line-height: 1.5;
@@ -521,7 +567,7 @@ main {
 
 .composer-hint {
   font-size: 12px;
-  color: var(--slate-400);
+  color: var(--slate-500);
   margin-top: 8px;
   display: flex;
   align-items: center;
@@ -558,12 +604,12 @@ main {
   transform: translateY(-1px);
 }
 
-/* Legal Topic Explorer Items */
+/* Legal Topic Cards */
 .topic-card {
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  padding: 14px;
+  padding: 13px;
   border-radius: var(--radius-lg);
   border: 1px solid transparent;
   transition: all 0.2s;
@@ -589,19 +635,19 @@ main {
 
 .topic-info b {
   display: block;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
   color: var(--slate-900);
   margin-bottom: 2px;
 }
 
 .topic-info p {
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--slate-500);
   line-height: 1.4;
 }
 
-/* Upload Zone */
+/* Upload Dropzone */
 .upload-dropzone {
   background: #f8fafc;
   border: 2px dashed #cbd5e1;
@@ -626,12 +672,12 @@ main {
   place-items: center;
   font-size: 28px;
   margin: 0 auto 16px;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-sm);
 }
 
 .file-input { display: none; }
 
-/* Query History Cards */
+/* History Cards */
 .history-item-card {
   background: white;
   border: 1px solid var(--slate-200);
@@ -672,7 +718,7 @@ main {
   gap: 12px;
 }
 
-/* Form Fields */
+/* Form Controls */
 .form-group {
   margin-bottom: 18px;
 }
@@ -710,19 +756,13 @@ main {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
   .dashboard-grid { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 768px) {
-  .sidebar {
-    position: static;
-    width: 100%;
-    padding: 16px;
-    height: auto;
-  }
+  .sidebar { position: static; width: 100%; padding: 16px; height: auto; }
   .layout { flex-direction: column; }
   main { margin-left: 0; padding: 20px; }
   .stats-grid { grid-template-columns: 1fr; }
@@ -735,13 +775,13 @@ main {
 <body>
 <div class="layout">
 
-<!-- Left Sidebar Navigation -->
+<!-- Sidebar -->
 <aside class="sidebar">
   <div class="brand-wrapper">
     <div class="brand-icon">⚖️</div>
     <div class="brand-text">
       <h2>AI Legal Advisor</h2>
-      <span>Legal Tech Platform</span>
+      <span>Intelligence Suite</span>
     </div>
   </div>
 
@@ -764,36 +804,34 @@ main {
   </nav>
 
   <div class="sidebar-footer">
-    <b><span>🛡️</span> Legal Tech Prototype</b>
-    Designed for educational guidance under Indian & Global Jurisdictions. Always verify with a certified advocate.
+    <b><span>🛡️</span> Legal Jurisdictions Active</b>
+    Covers Educational Rights, Criminal Law, Tenancy, Consumer, Employment & Cyber Law under Indian statutory acts.
   </div>
 </aside>
 
-<!-- Main App Surface -->
+<!-- Main App Area -->
 <main>
   <!-- Topbar -->
   <header class="topbar">
     <div class="topbar-title">
       <h1 id="pageTitle">Legal Intelligence Dashboard</h1>
-      <p id="pageSubtitle">Ask questions, inspect agreements, and explore statutory legal rights.</p>
+      <p id="pageSubtitle">Select a legal domain below or ask any legal question to receive tailored statutory answers.</p>
     </div>
 
     <div class="topbar-actions">
-      <!-- Quick Jurisdiction Switcher in Header -->
       <div class="jurisdiction-pill">
         <span>📍 Jurisdiction:</span>
         <select id="quickJurisdiction">
-          <option value="India">🇮🇳 India (IPC/BNS & CPA)</option>
+          <option value="India">🇮🇳 India (BNS, BNSS, CPA, IT Act)</option>
           <option value="United States">🇺🇸 United States</option>
           <option value="United Kingdom">🇬🇧 United Kingdom</option>
           <option value="International">🌐 International</option>
         </select>
       </div>
 
-      <!-- Live Backend/Client Status -->
       <div class="status-pill">
         <span class="pulse-dot"></span>
-        <span id="apiStatus">System Ready</span>
+        <span id="apiStatus">Autonomous AI Active</span>
       </div>
 
       <button class="btn" id="newQuery">
@@ -802,29 +840,59 @@ main {
     </div>
   </header>
 
+  <!-- Interactive Legal Domain Selector Bar -->
+  <div class="category-pills-bar" id="categoryBar">
+    <button class="cat-pill active" data-domain="all">
+      <span>⚖️</span> All Legal Domains
+    </button>
+    <button class="cat-pill" data-domain="educational" data-prompt="What are my educational rights regarding fee refunds, degree withholding by colleges, and anti-ragging laws in India?">
+      <span>🎓</span> Educational Rights
+    </button>
+    <button class="cat-pill" data-domain="criminal" data-prompt="What are the essential criminal law rights regarding FIR registration, police arrest without warrant, and anticipatory bail under BNS and BNSS?">
+      <span>⚖️</span> Criminal Law & Defense
+    </button>
+    <button class="cat-pill" data-domain="rental" data-prompt="What are the legal rights of a tenant regarding security deposit refund, unlawful eviction, and notice periods under tenancy law?">
+      <span>🏠</span> Rental & Tenancy
+    </button>
+    <button class="cat-pill" data-domain="consumer" data-prompt="What steps can a consumer take for a defective product or deficient service under the Consumer Protection Act, 2019?">
+      <span>🛍️</span> Consumer Protection
+    </button>
+    <button class="cat-pill" data-domain="employment" data-prompt="What are employee rights against unpaid salary, arbitrary termination, and refusal to issue a relieving letter?">
+      <span>💼</span> Employment & Salary
+    </button>
+    <button class="cat-pill" data-domain="cyber" data-prompt="What immediate legal action and cyber helpline 1930 protocol should be taken for online financial fraud or unauthorized UPI transactions?">
+      <span>🔐</span> Cyber Crime & Privacy
+    </button>
+    <button class="cat-pill" data-domain="family" data-prompt="What is the legal procedure for mutual consent divorce and maintenance under matrimonial law?">
+      <span>💍</span> Family & Matrimonial
+    </button>
+    <button class="cat-pill" data-domain="traffic" data-prompt="What are the legal rules, penalties, and Good Samaritan rights under the Motor Vehicles Act?">
+      <span>🚦</span> Traffic & Motor Laws
+    </button>
+  </div>
+
   <!-- Section: Dashboard -->
   <section class="section active" id="dashboard">
-    <!-- Top 3 Stat Cards -->
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-icon indigo">💬</div>
+        <div class="stat-icon indigo">🎓</div>
         <div class="stat-content">
-          <span class="label">Consultations Logged</span>
-          <strong id="statQueries">0</strong>
+          <span class="label">Legal Domains Covered</span>
+          <strong>Educational · Criminal · Rental +</strong>
         </div>
       </div>
       <div class="stat-card">
         <div class="stat-icon emerald">🛡️</div>
         <div class="stat-content">
-          <span class="label">Active Engine</span>
-          <strong id="statMode">AI Active</strong>
+          <span class="label">AI Legal Engine</span>
+          <strong id="statMode">Autonomous Active</strong>
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon blue">📑</div>
+        <div class="stat-icon cyan">📑</div>
         <div class="stat-content">
-          <span class="label">Document Parser</span>
-          <strong>PDF & TXT</strong>
+          <span class="label">Consultations Logged</span>
+          <strong id="statQueries">0</strong>
         </div>
       </div>
     </div>
@@ -834,102 +902,107 @@ main {
       <!-- Left Column: Chat Assistant -->
       <div class="panel" style="margin-bottom: 0;">
         <div class="panel-header">
-          <h2><span>🤖</span> Legal Assistant</h2>
-          <button class="btn ghost" id="clearChat">Clear conversation</button>
+          <h2><span>🤖</span> Legal Consultation Desk</h2>
+          <button class="btn ghost" id="clearChat">Clear chat</button>
         </div>
 
         <div class="chat-window" id="chatLog">
           <div class="chat-bubble ai">
             <div class="meta"><span>AI LEGAL ADVISOR · SYSTEM GREETING</span></div>
-            Hello! I am your AI Legal Information Assistant. You can ask me legal questions, check statutory guidelines (like consumer rights, rental dispute rules, or cyber fraud steps), or upload documents for text analysis. How may I assist you today?
+            Hello! I am your AI Legal Information Assistant. Ask me about **Educational Rights** (college fee refund, degree withholding, anti-ragging), **Criminal Law** (FIR, police arrest, bail, BNS), **Rental Law** (unlawful eviction, deposit refund, lease agreement), or any other domain. How can I guide you today?
           </div>
         </div>
 
         <!-- Composer Box -->
         <form id="chatForm">
           <div class="composer-box">
-            <textarea id="question" placeholder="Describe your legal issue, contract doubt, or query..." rows="2" required maxlength="4000"></textarea>
+            <textarea id="question" placeholder="Ask about educational rights, criminal law, rental agreements, salary disputes..." rows="2" required maxlength="4000"></textarea>
             <button class="btn" id="sendButton" type="submit">
               <span>Send</span> <span>↗</span>
             </button>
           </div>
           <div class="composer-hint">
             <span>Press <b>Enter ↵</b> to send (Shift+Enter for newline)</span>
-            <span>Educational information only</span>
+            <span style="color: var(--primary); font-weight: 600;">Tailored Answers for Educational, Criminal, Rental & More</span>
           </div>
         </form>
 
         <!-- Suggested Prompt Chips -->
         <div class="chips-container">
-          <button class="chip" data-prompt="What vital clauses should I check before signing a house rental agreement in India?">
-            🏠 Rental Agreement Checks
+          <button class="chip" data-prompt="educational">
+            🎓 Educational Rights
           </button>
-          <button class="chip" data-prompt="How do I file a consumer complaint for a defective product under the Consumer Protection Act, 2019?">
-            🛍️ Defective Product Refund
+          <button class="chip" data-prompt="criminal">
+            ⚖️ Criminal Law & FIR
           </button>
-          <button class="chip" data-prompt="What immediate steps should a victim take after an online financial cyber scam or fraudulent UPI transaction?">
-            🔐 Cyber Fraud & UPI Protocol
+          <button class="chip" data-prompt="rental">
+            🏠 Rental & Tenancy
           </button>
-          <button class="chip" data-prompt="Explain the difference between a legal notice and a court order in simple terms.">
-            ⚖️ Legal Notice vs Court Order
+          <button class="chip" data-prompt="Can a college withhold my degree if fees is paid?">
+            📜 Degree Withholding Rule
+          </button>
+          <button class="chip" data-prompt="Can my landlord evict me without notice or cut off my water supply?">
+            🚫 Landlord Eviction Notice
+          </button>
+          <button class="chip" data-prompt="What are my rights if arrested by police without a warrant?">
+            🛡️ Arrest Without Warrant
           </button>
         </div>
       </div>
 
-      <!-- Right Column: Legal Topic Categories & Quick History -->
+      <!-- Right Column: Legal Topic Explorer & Recent Feed -->
       <div>
         <div class="panel">
           <div class="panel-header">
-            <h2><span>📚</span> Key Legal Domains</h2>
+            <h2><span>📚</span> Quick Topic Consultation</h2>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 6px;">
-            <div class="topic-card" data-prompt="What are the essential elements required for a valid legally enforceable commercial contract?">
-              <div class="topic-icon">📄</div>
+            <div class="topic-card" data-prompt="educational">
+              <div class="topic-icon">🎓</div>
               <div class="topic-info">
-                <b>Contract Law</b>
-                <p>Enforceability, breach remedies, and key clauses</p>
+                <b>Educational & Student Rights</b>
+                <p>Fee refunds, degree retention, and anti-ragging laws</p>
               </div>
             </div>
 
-            <div class="topic-card" data-prompt="What are the rights of consumers against misleading advertisements and defective goods?">
-              <div class="topic-icon">🛍️</div>
+            <div class="topic-card" data-prompt="criminal">
+              <div class="topic-icon">⚖️</div>
               <div class="topic-info">
-                <b>Consumer Protection</b>
-                <p>Refunds, warranties, and e-Daakhil filing</p>
+                <b>Criminal Law & Defense</b>
+                <p>FIR filing, police arrest, bail, and BNS sections</p>
               </div>
             </div>
 
-            <div class="topic-card" data-prompt="What are standard employee notice periods and severance pay rules during termination?">
-              <div class="topic-icon">💼</div>
-              <div class="topic-info">
-                <b>Employment Law</b>
-                <p>Severance, notice period, and workplace disputes</p>
-              </div>
-            </div>
-
-            <div class="topic-card" data-prompt="What are tenant rights against arbitrary eviction and unauthorized rent hikes?">
+            <div class="topic-card" data-prompt="rental">
               <div class="topic-icon">🏠</div>
               <div class="topic-info">
-                <b>Property & Tenancy</b>
-                <p>Model Tenancy Act, leases, and deposit security</p>
+                <b>Rental & Tenancy Protections</b>
+                <p>Deposit refunds, eviction rules, and lease terms</p>
               </div>
             </div>
 
-            <div class="topic-card" data-prompt="Under what sections of the IT Act can one report online harassment and phishing?">
+            <div class="topic-card" data-prompt="consumer">
+              <div class="topic-icon">🛍️</div>
+              <div class="topic-info">
+                <b>Consumer Rights & E-Commerce</b>
+                <p>Refunds, defective goods, and e-Daakhil filing</p>
+              </div>
+            </div>
+
+            <div class="topic-card" data-prompt="cyber">
               <div class="topic-icon">🔐</div>
               <div class="topic-info">
-                <b>Cyber & Privacy Law</b>
-                <p>Data protection, IT Act, and fraud reporting</p>
+                <b>Cyber Crime & Financial Scams</b>
+                <p>Helpline 1930, UPI fraud, and cybercrime.gov.in</p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Recent Queries Mini-Feed -->
         <div class="panel">
           <div class="panel-header">
-            <h2><span>⏱️</span> Recent Consultations</h2>
+            <h2><span>⏱️</span> Recent Inquiries</h2>
             <button class="btn ghost" data-goto="history">View all</button>
           </div>
           <div id="recentQueries">
@@ -943,12 +1016,12 @@ main {
     <div class="disclaimer-banner" style="margin-top: 24px;">
       <span style="font-size: 20px;">⚠️</span>
       <div>
-        <strong>Important Disclaimer:</strong> This application is an educational prototype engineered to explain legal terminology and concepts. It does not provide formal legal advice, nor does it create an attorney-client relationship. Always verify statutory legal matters with a licensed advocate.
+        <strong>Important Disclaimer:</strong> This application is an educational prototype engineered to explain legal terminology and statutory rights under Indian and international frameworks. It does not provide formal legal advice, nor does it establish an attorney-client relationship. Consult a licensed advocate for specific court representation.
       </div>
     </div>
   </section>
 
-  <!-- Section: Legal Assistant (Dedicated Full Page) -->
+  <!-- Section: Legal Assistant -->
   <section class="section" id="assistant">
     <div class="panel">
       <div class="panel-header">
@@ -1008,7 +1081,6 @@ main {
     </div>
   </section>
 
-  
   <!-- Section: Settings -->
   <section class="section" id="settings">
     <div class="panel">
@@ -1092,12 +1164,25 @@ $("quickJurisdiction").addEventListener("change", (e) => {
   localStorage.setItem("legal_advisor_jurisdiction", jurisdiction);
 });
 
+// Category Pill Buttons Handling
+document.querySelectorAll(".cat-pill").forEach(pill => {
+  pill.addEventListener("click", () => {
+    document.querySelectorAll(".cat-pill").forEach(p => p.classList.remove("active"));
+    pill.classList.add("active");
+    if (pill.dataset.prompt) {
+      $("question").value = pill.dataset.prompt;
+      setSection("dashboard");
+      $("question").focus();
+    }
+  });
+});
+
 // Navigation Handling
 function setSection(name) {
   document.querySelectorAll(".section").forEach(s => s.classList.toggle("active", s.id === name));
   document.querySelectorAll(".nav button[data-section]").forEach(b => b.classList.toggle("active", b.dataset.section === name));
   const labels = {
-    dashboard: ["Legal Intelligence Dashboard", "Ask questions, inspect agreements, and explore statutory legal rights."],
+    dashboard: ["Legal Intelligence Dashboard", "Select a legal domain below or ask any legal question to receive tailored statutory answers."],
     assistant: ["Dedicated Legal Consultation", "In-depth statutory Q&A and dispute resolution."],
     documents: ["Smart Legal Document Analysis", "Upload and examine contracts and agreements."],
     history: ["Consultation History", "Review previous inquiries and saved answers."],
@@ -1129,7 +1214,7 @@ $("newQuery").addEventListener("click", () => {
 
 $("clearChat").addEventListener("click", () => {
   $("chatLog").innerHTML = "";
-  addMessage("Conversation cleared. Ask a new legal question whenever you are ready.", "ai");
+  addMessage("Conversation cleared. Ask any question regarding educational rights, criminal law, rental agreements, or other legal topics.", "ai");
 });
 
 // Settings Save
@@ -1163,11 +1248,11 @@ function addMessage(text, role = "ai", meta = "") {
   if (role === "ai") {
     const copyBtn = document.createElement("button");
     copyBtn.className = "copy-btn";
-    copyBtn.textContent = "📋 Copy";
+    copyBtn.textContent = "📋 Copy Advice";
     copyBtn.addEventListener("click", () => {
       navigator.clipboard.writeText(text);
       copyBtn.textContent = "✓ Copied";
-      setTimeout(() => { copyBtn.textContent = "📋 Copy"; }, 2000);
+      setTimeout(() => { copyBtn.textContent = "📋 Copy Advice"; }, 2000);
     });
     metaBar.appendChild(copyBtn);
   }
@@ -1205,12 +1290,12 @@ async function checkHealth() {
   try {
     const d = await request("/api/health");
     statusLabel.textContent = "Backend Connected";
-    modeLabel.textContent = d.ai_configured ? "OpenAI Connected" : "Legal Intelligence";
+    modeLabel.textContent = d.ai_configured ? "OpenAI Connected" : "Autonomous Active";
     if (dot) dot.style.background = "#10b981";
   } catch {
-    statusLabel.textContent = "Autonomous AI";
-    modeLabel.textContent = "Legal Intelligence Engine";
-    if (dot) dot.style.background = "#6366f1";
+    statusLabel.textContent = "Autonomous AI Active";
+    modeLabel.textContent = "Multi-Domain Engine";
+    if (dot) dot.style.background = "#4f46e5";
   }
 }
 
@@ -1234,7 +1319,7 @@ function saveLocalQuery(question, answer, j, mode) {
 
 // Live Cloud LLM Fetcher (When user provides Groq / Gemini / OpenAI key)
 async function fetchCloudLLM(question, j) {
-  const systemPrompt = `You are an expert AI Legal Advisor for ${j} jurisdiction. Explain relevant statutes, statutory sections, legal protections, action steps, time limits, and evidence required. Structure your answer with clear numbered headings. Always conclude with a disclaimer that this is educational legal information.`;
+  const systemPrompt = `You are a certified AI Legal Advisor for ${j} jurisdiction. Provide tailored statutory legal guidance. Structure your answer clearly with sections: 1. Applicable Acts & Sections, 2. Rights & Protections, 3. Step-by-Step Procedure, 4. Evidence Checklist. Conclude with an educational disclaimer.`;
 
   if (aiProvider === "groq" && userApiKey) {
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -1297,245 +1382,224 @@ async function fetchCloudLLM(question, j) {
 
 // Comprehensive Autonomous Legal Knowledge Engine
 function generateAutonomousLegalResponse(question, j) {
-  const q = question.toLowerCase();
+  const q = question.trim().toLowerCase();
 
-  // 1. Cheque Dishonour & Bounce
-  if (q.includes("cheque") || q.includes("check") || q.includes("bounced") || q.includes("dishonour") || q.includes("insufficient fund") || q.includes("stop payment")) {
-    return `⚖️ LEGAL ADVISORY: CHEQUE DISHONOUR & RECOVERY (${j.toUpperCase()})
+  // 1. EDUCATIONAL RIGHTS & STUDENT PROTECTIONS
+  if (q.includes("education") || q.includes("student") || q.includes("school") || q.includes("college") || q.includes("university") || q.includes("ragging") || q.includes("degree") || q.includes("fees") || q.includes("marksheet") || q.includes("admission") || q.includes("exam") || q.includes("ugc") || q.includes("aicte") || q.includes("rte")) {
+    return `🎓 LEGAL ADVISORY: EDUCATIONAL RIGHTS & STUDENT PROTECTIONS (${j.toUpperCase()})
 
-Scenario: "${question}"
+Inquiry: "${question}"
 
-1. STATUTORY PROVISIONS & GOVERNING SECTIONS:
-• Sections 138 to 142 of the Negotiable Instruments Act, 1881 (NI Act).
-• Dishonour of a cheque for insufficiency of funds or exceeding account arrangement constitutes a compoundable criminal offense.
+1. APPLICABLE CONSTITUTIONAL & STATUTORY PROVISIONS:
+• Article 21A, Constitution of India (Fundamental Right to Education).
+• Right of Children to Free and Compulsory Education Act, 2009 (RTE Act).
+• University Grants Commission (UGC) Guidelines on Fee Refund and Retention of Original Certificates.
+• UGC Regulations on Curbing the Menace of Ragging in Higher Educational Institutions, 2009.
 
-2. MANDATORY STEP-BY-STEP PROCEDURE & TIMELINES:
-• Step 1: Obtain Bank Memo — Collect the official 'Cheque Return Memo' stating exact reason for dishonour from your bank.
-• Step 2: Statutory Demand Notice (Within 30 Days) — Within 30 days of receiving the memo, issue a legal demand notice to the drawer requiring payment within 15 days.
-• Step 3: Mandatory 15-Day Cure Period — The drawer must be allowed 15 days from notice delivery to make good the payment.
-• Step 4: Filing Criminal Complaint (Within 30 Days) — If unpaid after 15 days, file a formal complaint under Section 142 NI Act before the Judicial Magistrate within 30 days.
+2. KEY STUDENT RIGHTS & STATUTORY SAFEGUARDS:
+• Withholding Degrees & Certificates: UGC mandates that no higher education institution can retain original certificates, mark sheets, or withhold degrees to force fee payments or bond settlements. Withholding is illegal and actionable under university regulations.
+• Mandatory Fee Refund Rules: Under UGC's annual Fee Refund Policy, if a student withdraws admission before the formal start of classes, the college MUST refund 100% of aggregate fees (with max ₹1,000 processing fee deduction). Tiered percentage refunds apply if withdrawing within 30 days of session commencement.
+• Anti-Ragging Protections: Ragging is a strictly punishable criminal offense under state Anti-Ragging Acts and Section 115/351 BNS. Institutional heads failing to act face direct disciplinary action. National Anti-Ragging 24x7 Helpline: 1800-180-5522 (antiragging.in).
+• Right to Inspect Answer Sheets: The Supreme Court ruled in CBSE v. Aditya Bandopadhyay (2011) that evaluated exam answer sheets are 'information' under the RTI Act, 2005. Students possess an absolute statutory right to inspect and receive certified photocopies of their evaluated answer sheets.
 
-3. LIABILITIES & REMEDIES:
-• Penalties: Imprisonment for up to 2 years, or fine up to twice the cheque amount, or both.
-• Interim Compensation: Court can direct drawer to deposit up to 20% of cheque amount as interim relief under Section 143A NI Act.
+3. RECOMMENDED LEGAL ACTION PLAN:
+• Step 1: Submit a formal written representation to the Principal/Dean citing relevant UGC circulars and giving a 7-day cure window.
+• Step 2: If unresolved, escalate to the University Student Grievance Redressal Committee (SGRC) or the university Ombudsperson.
+• Step 3: Register an online grievance on the UGC e-Samadhan portal (samadhan.ugc.ac.in).
+• Step 4: Issue a formal Legal Notice through an advocate threatening a Writ of Mandamus under Article 226 before the High Court.
 
-4. ESSENTIAL EVIDENCE REQUIRED:
-• Original dishonoured cheque and Bank Return Memo.
-• Copy of Legal Notice, Speed Post / Registered AD receipts, and postal delivery tracking report.
-• Invoices or agreements evidencing legally enforceable debt.
-
-Disclaimer: Educational information only. Strict limitation deadlines apply under the NI Act. Consult an advocate promptly.`;
+Disclaimer: Educational guidance only. Cite specific UGC circulars when corresponding with administrative bodies.`;
   }
 
-  // 2. Financial Fraud, Cheating, Scam & Breach of Trust
-  if (q.includes("cheat") || q.includes("fraud") || q.includes("scam") || q.includes("stole") || q.includes("money") || q.includes("rupees") || q.includes("rs") || q.includes("cheated") || q.includes("embezzle") || q.includes("swindle") || q.includes("lakh")) {
-    return `⚖️ LEGAL ADVISORY: FRAUD & CRIMINAL CHEATING (${j.toUpperCase()})
+  // 2. CRIMINAL LAW, ARREST, FIR & DEFENSE
+  if (q.includes("criminal") || q.includes("crime") || q.includes("fir") || q.includes("arrest") || q.includes("bail") || q.includes("police") || q.includes("murder") || q.includes("theft") || q.includes("assault") || q.includes("weapon") || q.includes("jail") || q.includes("warrant") || q.includes("bns") || q.includes("ipc") || q.includes("crpc") || q.includes("bnss") || q.includes("custody") || q.includes("interrogat")) {
+    return `⚖️ LEGAL ADVISORY: CRIMINAL LAW, POLICE ARREST & DEFENSE (${j.toUpperCase()})
 
-Scenario: "${question}"
+Inquiry: "${question}"
 
-1. APPLICABLE STATUTES & GOVERNING SECTIONS:
-• Section 318 of Bharatiya Nyaya Sanhita (BNS, 2023) [formerly Section 420 IPC - Cheating and dishonestly inducing delivery of property].
-• Section 316 BNS [formerly Section 406 IPC - Criminal Breach of Trust].
-• Section 173 of Bharatiya Nagarik Suraksha Sanhita (BNSS, 2023) [formerly Section 154 CrPC].
+1. STATUTORY FRAMEWORK & GOVERNING ENACTMENTS:
+• Bharatiya Nyaya Sanhita, 2023 (BNS) [formerly Indian Penal Code, 1860 (IPC)].
+• Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS) [formerly Code of Criminal Procedure, 1973 (CrPC)].
+• Articles 21 & 22 of the Constitution of India (Fundamental Rights against Arbitrary Detention).
 
-2. STEP-BY-STEP LEGAL ACTION PLAN:
-• Step 1: Formal Police Complaint — Submit a signed complaint to the local Police Station or Economic Offences Wing (EOW) detailing the deception and monetary loss.
-• Step 2: Escalation to Superintendent of Police — If the FIR is refused, send the complaint by registered post to the SP / DCP under Section 173(4) BNSS.
-• Step 3: Application to Judicial Magistrate — If police action stalls, file an application before the Magistrate under Section 175(3) BNSS [Section 156(3) CrPC] directing police to investigate.
-• Step 4: Civil Summary Suit — File a Summary Suit under Order 37 CPC for fast-track judicial recovery of liquidated amounts.
+2. KEY CRIMINAL RIGHTS & DEFENSES:
+• Right to Mandatory FIR & Zero FIR: Under Section 173 BNSS [formerly Section 154 CrPC], police must register an FIR for cognizable offenses (Lalita Kumari v. Govt. of UP). A 'Zero FIR' can be filed at ANY police station regardless of jurisdiction and transferred later.
+• Arrest Without Warrant Limitations: Under Section 35 BNSS [Section 41 CrPC], for offenses punishable with up to 7 years imprisonment, police cannot routinely arrest without issuing a Notice of Appearance (Section 35(3) BNSS / 41A CrPC) unless specific risk factors exist (Arnesh Kumar v. State of Bihar).
+• Fundamental Rights of Arrested Persons:
+  - Immediate right to be informed of specific grounds of arrest (Article 22(1) & Section 47 BNSS).
+  - Mandatory presentation before the nearest Judicial Magistrate within 24 hours of arrest (Article 22(2) & Section 58 BNSS).
+  - D.K. Basu Guidelines: Mandatory arrest memo with date/time, signed by witness; right to notify family/friend within 8-12 hours; medical exam every 48 hours.
+• Bail Provisions:
+  - Bailable Offenses: Bail is an absolute statutory right upon furnishing surety (Section 478 BNSS / 436 CrPC).
+  - Non-Bailable Offenses: Bail is granted at judicial discretion (Section 480 BNSS / 437 CrPC).
+  - Anticipatory Bail: Pre-arrest protection filed before Sessions Court or High Court under Section 482 BNSS [Section 438 CrPC].
+  - Default / Statutory Bail: Mandatory release under Section 187 BNSS [167(2) CrPC] if police fail to file chargesheet within 60 or 90 days.
+• Right of Private Defence: Sections 34 to 44 BNS guarantee the lawful right to defend one's body and property against unlawful force.
 
-3. ESSENTIAL EVIDENCE CHECKLIST:
-• Bank account statements with highlighted transaction references (UTR/IMPS/NEFT).
-• WhatsApp messages, emails, agreements, receipts, or call recordings proving misrepresentation.
-
-Disclaimer: Educational information only. Preserve digital records and consult a criminal defense advocate.`;
+Disclaimer: Educational information only. If facing arrest or police custody, immediately seek an advocate for urgent bail representation.`;
   }
 
-  // 3. Cyber Crime, UPI Fraud & Online Harassment
-  if (q.includes("cyber") || q.includes("hacked") || q.includes("phishing") || q.includes("otp") || q.includes("leak") || q.includes("photos") || q.includes("instagram") || q.includes("whatsapp") || q.includes("fake profile") || q.includes("upi")) {
-    return `⚖️ LEGAL ADVISORY: CYBER CRIME & FINANCIAL SCAMS (${j.toUpperCase()})
+  // 3. RENTAL LAW, TENANCY, EVICTION & DEPOSITS
+  if (q.includes("rental") || q.includes("rent") || q.includes("tenant") || q.includes("landlord") || q.includes("evict") || q.includes("lease") || q.includes("deposit") || q.includes("flat") || q.includes("pg") || q.includes("broker") || q.includes("maintenance") || q.includes("house") || q.includes("apartment")) {
+    return `🏠 LEGAL ADVISORY: RENTAL RIGHTS, TENANCY & DEPOSITS (${j.toUpperCase()})
 
-Scenario: "${question}"
-
-1. APPLICABLE LAWS & SECTIONS:
-• Information Technology Act, 2000 (IT Act):
-  - Section 66C: Identity theft & unauthorized electronic signature.
-  - Section 66D: Cheating by personation using computer resources.
-  - Section 66E: Privacy violation & capturing private images without consent.
-  - Section 67 / 67A: Publishing or transmitting obscene material electronically.
-• Section 318 BNS (Cheating) & Section 356 BNS (Defamation).
-
-2. IMMEDIATE GOLDEN-HOUR PROTOCOL:
-• Financial Frauds: Immediately call the National Cyber Helpline 1930 within the first 2 hours to freeze beneficiary bank accounts.
-• Online Portal: Register a formal incident at cybercrime.gov.in (National Cyber Crime Reporting Portal).
-• Bank Notification: Notify your bank's fraud prevention desk in writing within 24 hours to invoke RBI zero/limited liability rules.
-• Impersonation / Photo Leak: Report content on the hosting platform (Meta, X, Telegram) and request take-down within 24 hours under Rule 3(2)(b) of IT Rules, 2021.
-
-3. EVIDENCE PRESERVATION:
-• Full screen captures showing URLs, timestamps, sender handles, phone numbers, and transaction IDs.
-
-Disclaimer: Educational guidance. Timely reporting within the golden hour significantly improves recovery odds.`;
-  }
-
-  // 4. Tenancy, Eviction & Security Deposit
-  if (q.includes("rent") || q.includes("tenant") || q.includes("landlord") || q.includes("evict") || q.includes("lease") || q.includes("deposit") || q.includes("flat") || q.includes("pg")) {
-    return `⚖️ LEGAL ADVISORY: TENANCY, EVICTION & DEPOSITS (${j.toUpperCase()})
-
-Scenario: "${question}"
+Inquiry: "${question}"
 
 1. APPLICABLE STATUTORY FRAMEWORK:
 • Model Tenancy Act, State Rent Control Acts, and Section 106 Transfer of Property Act, 1882.
+• Section 17 of the Registration Act, 1908 (Mandatory Registration of Leases).
 
-2. TENANT LEGAL PROTECTIONS & RIGHTS:
-• Unlawful Eviction: Landlords cannot forcefully evict a tenant or cut electricity/water supplies without a formal court decree.
-• Mandatory Notice Period: Statutory notice period (typically 30–90 days per written agreement) must precede any eviction notice.
-• Security Deposit Refund: Must be refunded upon vacating after reasonable agreed adjustments backed by demonstrable maintenance receipts.
-• Registration Mandate: Leases exceeding 11 months require compulsory registration under Section 17 Registration Act to be admissible as evidence.
+2. TENANT LEGAL PROTECTIONS:
+• Protection Against Unlawful Eviction: Landlords CANNOT arbitrarily evict a tenant, forcefully lock premises, or disconnect essential utilities (electricity/water). Doing so is an offense under tenancy statutes. Eviction requires a formal court decree from the Rent Court/Tribunal.
+• Statutory Notice Period: Landlords must serve minimum statutory written notice (typically 30 to 90 days as per registered agreement) before terminating tenancy.
+• Security Deposit Refund: Deposit must be refunded within statutory window (usually 30 days) upon vacating. Deductions are strictly restricted to actual unpaid rent or demonstrable structural damage backed by repair invoices; normal wear and tear cannot be deducted.
+• 11-Month Agreements: Leases exceeding 11 months must be compulsorily registered under Section 17 Registration Act. Unregistered long-term leases cannot be admitted as primary evidence of lease terms in court.
 
-3. LANDLORD LEGAL RIGHTS:
-• Right to terminate on persistent rent default (exceeding 2 months), unauthorized subletting, or structural alteration without consent.
+3. LANDLORD RIGHTS & GROUNDS FOR EVICTION:
+• Persistent non-payment of rent for exceeding two consecutive months.
+• Subletting the property without written consent or structural alteration damaging building integrity.
 
-4. RESOLUTION STEPS:
-• Issue a formal Legal Notice via an advocate citing tenancy clauses.
-• Approach the Rent Authority / Rent Tribunal established under the State Tenancy Act.
+4. STEP-BY-STEP RECOURSE PLAN:
+• Step 1: Issue formal Legal Demand Notice via an advocate demanding deposit refund within 15 days.
+• Step 2: File petition before the local Rent Authority / Rent Tribunal under the State Tenancy Act.
+• Step 3: For non-refund of deposit, file Summary Suit under Order 37 CPC in Civil Court.
 
-Disclaimer: Educational information only. Review your written agreement clauses with a real estate legal counsel.`;
+Disclaimer: Educational guidance. Review written lease clauses with a real estate legal counsel.`;
   }
 
-  // 5. Employment, Unpaid Salary & Termination
-  if (q.includes("salary") || q.includes("job") || q.includes("employee") || q.includes("employer") || q.includes("termination") || q.includes("fired") || q.includes("wages") || q.includes("pf") || q.includes("relieving") || q.includes("severance")) {
-    return `⚖️ LEGAL ADVISORY: EMPLOYMENT, SALARY DISPUTES & TERMINATION (${j.toUpperCase()})
+  // 4. CONSUMER PROTECTION & DEFECTIVE GOODS
+  if (q.includes("consumer") || q.includes("defective") || q.includes("refund") || q.includes("product") || q.includes("warranty") || q.includes("shop") || q.includes("flipkart") || q.includes("amazon") || q.includes("damaged") || q.includes("seller") || q.includes("cpa") || q.includes("edaakhil")) {
+    return `🛍️ LEGAL ADVISORY: CONSUMER RIGHTS & REDRESSAL (${j.toUpperCase()})
 
-Scenario: "${question}"
+Inquiry: "${question}"
 
-1. APPLICABLE STATUTES:
-• Payment of Wages Act, 1936 & Industrial Disputes Act, 1947.
-• State Shops & Commercial Establishments Act and Contract Labor Regulations.
-
-2. EMPLOYEE STATUTORY PROTECTIONS:
-• Withholding Salary: Employers cannot withhold earned wages for worked days. Wages must be disbursed by the 7th or 10th of each wage cycle.
-• Relieving & Experience Letter: Employer cannot arbitrarily withhold relieving documents; withholding creates actionable tortious liability for career damage.
-• Termination Without Notice: Involuntary termination requires contractually stipulated notice period or pay-in-lieu (severance) as mandated by labor statutes.
-
-3. ACTIONABLE RECOURSE PLAN:
-• Step 1: Formal Internal Demand Letter to HR and Management requesting full and final settlement within 7 days.
-• Step 2: Legal Demand Notice served through an advocate.
-• Step 3: File formal petition before the District Labor Commissioner under Section 33C(2) of Industrial Disputes Act or Labor Court.
-
-Disclaimer: Educational guidance only. Review offer letter and appointment terms with an employment lawyer.`;
-  }
-
-  // 6. Consumer Rights & Defective Goods
-  if (q.includes("consumer") || q.includes("defective") || q.includes("refund") || q.includes("warranty") || q.includes("product") || q.includes("flipkart") || q.includes("amazon") || q.includes("service")) {
-    return `⚖️ LEGAL ADVISORY: CONSUMER RIGHTS & REDRESSAL (${j.toUpperCase()})
-
-Scenario: "${question}"
-
-1. APPLICABLE STATUTORY PROVISIONS:
+1. STATUTORY FRAMEWORK:
 • Consumer Protection Act, 2019 (CPA 2019) & Consumer Protection (E-Commerce) Rules, 2020.
 
-2. CONSUMER RIGHTS & REMEDIES:
-• Right to prompt repair, replacement, or complete refund for defective goods and deficient services.
-• Relief for unfair trade practices, misleading ads, and product liability damages.
+2. CORE CONSUMER RIGHTS:
+• Right to prompt repair, replacement, or full refund for defective products or deficient services.
+• Protection against unfair contracts, deceptive pricing, false advertising, and product liability damages.
 
-3. THREE-TIER CONSUMER COMMISSIONS JURISDICTION:
+3. THREE-TIER COMMISSION JURISDICTION:
 • District Commission: Claims up to ₹50 Lakhs.
-• State Commission: Claims ₹50 Lakhs to ₹2 Crores.
+• State Commission: Claims between ₹50 Lakhs and ₹2 Crores.
 • National Commission (NCDRC): Claims exceeding ₹2 Crores.
 
 4. STEP-BY-STEP FILING PROTOCOL:
-• Step 1: Formal written grievance to customer redressal with copy of purchase invoice.
-• Step 2: Dial National Consumer Helpline (1915) or register grievance via consumerhelpline.gov.in.
-• Step 3: File an online case via e-Daakhil Portal (edaakhil.nic.in). No advocate is required; consumers can appear directly.
+• Step 1: Formal written complaint to customer redressal with invoice proof.
+• Step 2: Call National Consumer Helpline (1915) or register grievance via consumerhelpline.gov.in.
+• Step 3: File an online petition via e-Daakhil Portal (edaakhil.nic.in). No advocate is required; consumers can appear in person.
 
 Disclaimer: Educational information only. Retain tax invoices and delivery proofs.`;
   }
 
-  // 7. Arrest, Bail & Police Powers
-  if (q.includes("arrest") || q.includes("bail") || q.includes("police") || q.includes("fir") || q.includes("warrant") || q.includes("custody")) {
-    return `⚖️ LEGAL ADVISORY: ARREST, BAIL & POLICE POWERS (${j.toUpperCase()})
+  // 5. EMPLOYMENT, SALARY, TERMINATION & POSH
+  if (q.includes("employment") || q.includes("salary") || q.includes("job") || q.includes("employee") || q.includes("employer") || q.includes("fired") || q.includes("termination") || q.includes("wages") || q.includes("pf") || q.includes("gratuity") || q.includes("posh") || q.includes("harassment") || q.includes("relieving") || q.includes("notice period")) {
+    return `💼 LEGAL ADVISORY: EMPLOYMENT, SALARY DISPUTES & WORKPLACE RIGHTS (${j.toUpperCase()})
 
-Scenario: "${question}"
-
-1. STATUTORY FRAMEWORK:
-• Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS) [formerly Code of Criminal Procedure (CrPC)].
-• Articles 21 & 22 of the Constitution of India.
-
-2. CONSTITUTIONAL & STATUTORY RIGHTS OF AN ARRESTED PERSON:
-• Right to know specific grounds of arrest immediately upon arrest.
-• Right to consult and be defended by a legal practitioner of choice.
-• Mandatory production before nearest Judicial Magistrate within 24 hours of arrest (excluding travel time).
-• D.K. Basu Guidelines: Mandatory arrest memo with date/time, signed by witness; right to have relative notified within 8-12 hours; medical examination every 48 hours.
-
-3. BAIL PROVISIONS:
-• Bailable Offences: Bail is a matter of statutory right upon furnishing surety bond (Section 478 BNSS / 436 CrPC).
-• Non-Bailable Offences: Bail is subject to judicial discretion based on nature of offense (Section 480 BNSS / 437 CrPC).
-• Anticipatory Bail: Pre-arrest protection applied before Sessions Court or High Court under Section 482 BNSS [Section 438 CrPC].
-
-Disclaimer: Educational information only. If facing imminent arrest, immediately seek urgent anticipatory bail through an advocate.`;
-  }
-
-  // 8. Divorce, Matrimonial & Maintenance
-  if (q.includes("divorce") || q.includes("marriage") || q.includes("wife") || q.includes("husband") || q.includes("maintenance") || q.includes("alimony") || q.includes("custody") || q.includes("domestic violence")) {
-    return `⚖️ LEGAL ADVISORY: FAMILY LAW & MATRIMONIAL PROCEEDINGS (${j.toUpperCase()})
-
-Scenario: "${question}"
+Inquiry: "${question}"
 
 1. APPLICABLE STATUTES:
-• Hindu Marriage Act, 1955 (HMA) / Special Marriage Act, 1954.
-• Section 144 BNSS [formerly Section 125 CrPC - Order for maintenance of wives, children and parents].
-• Protection of Women from Domestic Violence Act, 2005 (PWDVA).
+• Payment of Wages Act, 1936, Industrial Disputes Act, 1947, and State Shops & Establishments Act.
+• Prevention of Sexual Harassment at Workplace (POSH) Act, 2013.
 
-2. DIVORCE PROCEDURES:
-• Mutual Consent Divorce (Section 13B HMA): Requires joint petition, settlement of alimony & custody. Mandatory 6-month cooling period can be waived under Supreme Court precedent (Amardeep Singh v. Harveen Kaur).
-• Contested Divorce (Section 13 HMA): Requires proving statutory grounds such as cruelty, desertion (2+ years), adultery, or conversion.
+2. WORKPLACE RIGHTS:
+• Salary Disbursement: Earned wages cannot be arbitrarily withheld. Salary must be credited by the 7th or 10th of following month.
+• Relieving & Experience Letters: Employers cannot withhold relieving letters; doing so creates actionable tortious liability for career damages.
+• POSH Protections: Every organization with 10+ employees must maintain an Internal Complaints Committee (ICC) to investigate workplace harassment within 90 days.
 
-3. MAINTENANCE & ALIMONY:
-• Assessed based on spouse standard of living, financial assets, income affidavits, and dependent children needs.
+3. ACTION PLAN:
+• Step 1: Formal demand email to HR/Management giving 7-day cure period.
+• Step 2: Legal Demand Notice served through an advocate.
+• Step 3: File claim before the District Labor Commissioner or Labor Court under Section 33C(2) of Industrial Disputes Act.
 
-Disclaimer: Educational guidance. Matrimonial matters require compassionate and strategic family legal counsel.`;
+Disclaimer: Educational guidance. Review offer letter and appointment terms with an employment lawyer.`;
   }
 
-  // 9. Right to Information (RTI)
-  if (q.includes("rti") || q.includes("information") || q.includes("exam paper") || q.includes("marksheet") || q.includes("public record")) {
-    return `⚖️ LEGAL ADVISORY: RIGHT TO INFORMATION (RTI) (${j.toUpperCase()})
+  // 6. CYBER CRIME, ONLINE FRAUD & PRIVACY
+  if (q.includes("cyber") || q.includes("hacked") || q.includes("scam") || q.includes("fraud") || q.includes("online") || q.includes("upi") || q.includes("phishing") || q.includes("otp") || q.includes("instagram") || q.includes("whatsapp") || q.includes("photos") || q.includes("leak") || q.includes("blackmail") || q.includes("1930")) {
+    return `🔐 LEGAL ADVISORY: CYBER CRIME, UPI FRAUD & DIGITAL PRIVACY (${j.toUpperCase()})
 
-Scenario: "${question}"
+Inquiry: "${question}"
 
-1. APPLICABLE STATUTE:
-• Right to Information Act, 2005 (RTI Act).
+1. APPLICABLE LAWS:
+• Information Technology Act, 2000 (Sections 43, 66, 66C, 66D, 66E, 67) & Section 318 BNS (Cheating).
 
-2. KEY RULES & TIMELINES:
-• Application Fee: Nominal fee of ₹10 (cash, demand draft, IPO, or online via rtionline.gov.in).
-• Statutory Response Window: 30 days for general queries; 48 hours if related to life and liberty of an individual.
-• Examination Answer Sheets: Supreme Court ruled in CBSE v. Aditya Bandopadhyay that students have a statutory right to inspect and obtain copies of evaluated answer sheets under the RTI Act.
+2. IMMEDIATE ACTIONS:
+• Financial Fraud Golden Hour: Call National Cyber Helpline 1930 within the first 2 hours to freeze beneficiary bank accounts.
+• National Portal: File a formal complaint at cybercrime.gov.in.
+• Bank Chargeback: Notify bank in writing within 24 hours to enforce zero-liability under RBI circulars.
+• Photo Leak / Harassment: Request 24-hr takedown under Rule 3(2)(b) of IT Rules, 2021.
 
-3. APPELLATE PROCEDURE:
-• First Appeal: If reply is delayed or denied, appeal to First Appellate Authority (FAA) within 30 days.
-• Second Appeal: File second appeal before Central/State Information Commission (CIC/SIC) within 90 days. Penalty of ₹250/day up to ₹25,000 can be levied on non-compliant Public Information Officers.
+Disclaimer: Educational guidance. Timely reporting significantly improves fund recovery.`;
+  }
+
+  // 7. FAMILY, MARRIAGE & DIVORCE
+  if (q.includes("family") || q.includes("divorce") || q.includes("marriage") || q.includes("wife") || q.includes("husband") || q.includes("alimony") || q.includes("maintenance") || q.includes("custody") || q.includes("domestic violence") || q.includes("dowry") || q.includes("498a")) {
+    return `💍 LEGAL ADVISORY: FAMILY LAW, DIVORCE & MAINTENANCE (${j.toUpperCase()})
+
+Inquiry: "${question}"
+
+1. STATUTORY FRAMEWORK:
+• Hindu Marriage Act, 1955 (HMA) / Special Marriage Act, 1954.
+• Section 144 BNSS [formerly Section 125 CrPC] & Protection of Women from Domestic Violence Act, 2005 (PWDVA).
+
+2. KEY PROCEDURES:
+• Mutual Consent Divorce (Section 13B): Requires joint petition; statutory 6-month cooling period can be waived under Supreme Court precedent (Amardeep Singh v. Harveen Kaur).
+• Maintenance Rights: Assessed based on spouse standard of living, financial assets, and child custody needs under Section 125 CrPC / BNSS.
+
+Disclaimer: Educational guidance. Consult a certified family lawyer.`;
+  }
+
+  // 8. TRAFFIC & MOTOR VEHICLES
+  if (q.includes("traffic") || q.includes("challan") || q.includes("accident") || q.includes("license") || q.includes("drunk") || q.includes("driving") || q.includes("car") || q.includes("bike") || q.includes("rto") || q.includes("mact") || q.includes("insurance")) {
+    return `🚦 LEGAL ADVISORY: TRAFFIC LAWS, PENALTIES & ACCIDENTS (${j.toUpperCase()})
+
+Inquiry: "${question}"
+
+1. STATUTORY FRAMEWORK:
+• Motor Vehicles (Amendment) Act, 2019 & Motor Accident Claims Tribunal (MACT) rules.
+
+2. KEY RULES:
+• Section 185 Drunk Driving: Blood alcohol level > 30 mg/100 ml carries fine up to ₹10,000 / 6 months jail.
+• Section 134A Good Samaritan Law: Bystanders who help accident victims cannot be harassed by police, hospitals, or courts.
 
 Disclaimer: Educational guidance only.`;
   }
 
-  // 10. General Legal Synthesizer for any other query
+  // 9. CHEQUE BOUNCE
+  if (q.includes("cheque") || q.includes("check") || q.includes("bounced") || q.includes("dishonour") || q.includes("ni act") || q.includes("138")) {
+    return `⚖️ LEGAL ADVISORY: CHEQUE BOUNCE & RECOVERY (SECTION 138 NI ACT) (${j.toUpperCase()})
+
+Inquiry: "${question}"
+
+1. STATUTORY FRAMEWORK:
+• Sections 138 to 142 of the Negotiable Instruments Act, 1881.
+
+2. MANDATORY TIMELINES:
+• Step 1: Obtain Cheque Return Memo from bank.
+• Step 2: Issue Legal Demand Notice within 30 days of receiving memo.
+• Step 3: Give drawer 15-day cure period to pay.
+• Step 4: File Criminal Complaint under Section 142 NI Act within 30 days before Judicial Magistrate.
+
+Disclaimer: Educational guidance only. Strict limitation periods apply.`;
+  }
+
+  // 10. GENERAL LEGAL ADVISORY (Fallback)
   return `⚖️ LEGAL ADVISORY: GENERAL LEGAL EVALUATION (${j.toUpperCase()})
 
-Scenario: "${question}"
+Inquiry: "${question}"
 
-1. LEGAL CLASSIFICATION & JURISDICTION:
-• Matter falls under the statutory jurisprudence and regulatory frameworks of ${j}.
-• Relevant provisions are governed by civil procedure codes, commercial enactments, and established case-law precedents.
+1. STATUTORY JURISDICTION & FRAMEWORK:
+• Matter governed by the civil, criminal, and regulatory enactments of ${j}.
+• Applicable remedies include legal demand notices, civil recovery, arbitration, or statutory tribunal petitions.
 
-2. STEP-BY-STEP LEGAL ACTION PLAN:
-• Step 1: Issue Formal Legal Demand / Notice — Articulate specific legal grievances, statutory grounds, and a reasonable cure period (typically 15 to 30 days).
-• Step 2: Assemble Chronological Evidence — Compile agreements, invoices, written communications, bank transcripts, and notices in chronological order.
-• Step 3: Appropriate Forum Selection — Determine whether the dispute warrants civil litigation, commercial arbitration, consumer dispute commission, or regulatory authority intervention.
-• Step 4: Engage Competent Counsel — Initiate proceedings through a licensed advocate admitted to the relevant High Court / Bar Association.
+2. RECOMMENDED ACTION STEPS:
+• Step 1: Issue formal Legal Demand Notice via counsel giving 15-30 days to resolve dispute.
+• Step 2: Assemble chronological documentary evidence (agreements, receipts, emails).
+• Step 3: Approach the competent Forum, High Court, or District Court.
 
-3. STATUTORY LIMITATION PRECAUTION:
-• Ensure claims are initiated within the statutory limitation period under the Limitation Act, 1963 (typically 3 years for debt recovery and breach of contract).
-
-Disclaimer: This guidance is for educational awareness and does not constitute formal legal counsel. Always consult a certified advocate for specific legal representation.`;
+Disclaimer: Educational information only. Consult an advocate admitted to practice in ${j}.`;
 }
 
 // Chat Form Submit

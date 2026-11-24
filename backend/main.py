@@ -103,6 +103,78 @@ def generate_legal_intelligence_response(question: str, jurisdiction: str) -> st
     q = question.lower()
     j = jurisdiction.strip() or "India"
 
+    # 1. EDUCATIONAL RIGHTS & STUDENT PROTECTIONS
+    if any(k in q for k in ["education", "educational", "student", "school", "college", "university", "ragging", "degree", "fees", "marksheet", "admission", "exam", "ugc", "aicte", "rte"]):
+        return (
+            f"🎓 LEGAL ADVISORY: EDUCATIONAL RIGHTS & STUDENT PROTECTIONS ({j.upper()})\n\n"
+            f"Query: \"{question}\"\n\n"
+            "1. APPLICABLE CONSTITUTIONAL & STATUTORY PROVISIONS:\n"
+            "• Article 21A, Constitution of India (Fundamental Right to Education).\n"
+            "• Right of Children to Free and Compulsory Education Act, 2009 (RTE Act).\n"
+            "• University Grants Commission (UGC) Guidelines on Fee Refund and Retention of Original Certificates.\n"
+            "• UGC Regulations on Curbing the Menace of Ragging in Higher Educational Institutions, 2009.\n\n"
+            "2. KEY STUDENT RIGHTS & STATUTORY SAFEGUARDS:\n"
+            "• Withholding Degrees & Certificates: UGC mandates that no higher education institution can retain original certificates, mark sheets, or withhold degrees to force fee payments or bond settlements. Withholding is illegal and actionable under university regulations.\n"
+            "• Mandatory Fee Refund Rules: Under UGC Fee Refund Policy, if a student withdraws admission before the formal start of classes, the college MUST refund 100% of aggregate fees (with max ₹1,000 processing fee deduction). Tiered percentage refunds apply if withdrawing within 30 days of session commencement.\n"
+            "• Anti-Ragging Protections: Ragging is a strictly punishable criminal offense under state Anti-Ragging Acts and Section 115/351 BNS. Institutional heads failing to act face direct disciplinary action. National Anti-Ragging 24x7 Helpline: 1800-180-5522 (antiragging.in).\n"
+            "• Right to Inspect Answer Sheets: The Supreme Court ruled in CBSE v. Aditya Bandopadhyay (2011) that evaluated exam answer sheets are 'information' under the RTI Act, 2005. Students possess an absolute statutory right to inspect and receive certified photocopies of their evaluated answer sheets.\n\n"
+            "3. RECOMMENDED LEGAL ACTION PLAN:\n"
+            "• Step 1: Submit a formal written representation to the Principal/Dean citing relevant UGC circulars and giving a 7-day cure window.\n"
+            "• Step 2: If unresolved, escalate to the University Student Grievance Redressal Committee (SGRC) or the university Ombudsperson.\n"
+            "• Step 3: Register an online grievance on the UGC e-Samadhan portal (samadhan.ugc.ac.in).\n"
+            "• Step 4: Issue a formal Legal Notice through an advocate threatening a Writ of Mandamus under Article 226 before the High Court.\n\n"
+            "Disclaimer: Educational guidance only. Cite specific UGC circulars when corresponding with administrative bodies."
+        )
+
+    # 2. CRIMINAL LAW, POLICE ARREST, FIR & DEFENSE
+    elif any(k in q for k in ["criminal", "crime", "fir", "arrest", "bail", "police", "murder", "theft", "assault", "weapon", "jail", "warrant", "bns", "ipc", "crpc", "bnss", "custody", "interrogat"]):
+        return (
+            f"⚖️ LEGAL ADVISORY: CRIMINAL LAW, POLICE ARREST & DEFENSE ({j.upper()})\n\n"
+            f"Query: \"{question}\"\n\n"
+            "1. STATUTORY FRAMEWORK & GOVERNING ENACTMENTS:\n"
+            "• Bharatiya Nyaya Sanhita, 2023 (BNS) [formerly Indian Penal Code, 1860 (IPC)].\n"
+            "• Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS) [formerly Code of Criminal Procedure, 1973 (CrPC)].\n"
+            "• Articles 21 & 22 of the Constitution of India (Fundamental Rights against Arbitrary Detention).\n\n"
+            "2. KEY CRIMINAL RIGHTS & DEFENSES:\n"
+            "• Right to Mandatory FIR & Zero FIR: Under Section 173 BNSS [formerly Section 154 CrPC], police must register an FIR for cognizable offenses (Lalita Kumari v. Govt. of UP). A 'Zero FIR' can be filed at ANY police station regardless of jurisdiction and transferred later.\n"
+            "• Arrest Without Warrant Limitations: Under Section 35 BNSS [Section 41 CrPC], for offenses punishable with up to 7 years imprisonment, police cannot routinely arrest without issuing a Notice of Appearance (Section 35(3) BNSS / 41A CrPC) unless specific risk factors exist (Arnesh Kumar v. State of Bihar).\n"
+            "• Fundamental Rights of Arrested Persons:\n"
+            "  - Immediate right to be informed of specific grounds of arrest (Article 22(1) & Section 47 BNSS).\n"
+            "  - Mandatory presentation before the nearest Judicial Magistrate within 24 hours of arrest (Article 22(2) & Section 58 BNSS).\n"
+            "  - D.K. Basu Guidelines: Mandatory arrest memo with date/time, signed by witness; right to notify family/friend within 8-12 hours; medical exam every 48 hours.\n"
+            "• Bail Provisions:\n"
+            "  - Bailable Offenses: Bail is an absolute statutory right upon furnishing surety (Section 478 BNSS / 436 CrPC).\n"
+            "  - Non-Bailable Offenses: Bail is granted at judicial discretion (Section 480 BNSS / 437 CrPC).\n"
+            "  - Anticipatory Bail: Pre-arrest protection filed before Sessions Court or High Court under Section 482 BNSS [Section 438 CrPC].\n"
+            "  - Default / Statutory Bail: Mandatory release under Section 187 BNSS [167(2) CrPC] if police fail to file chargesheet within 60 or 90 days.\n"
+            "• Right of Private Defence: Sections 34 to 44 BNS guarantee the lawful right to defend one's body and property against unlawful force.\n\n"
+            "Disclaimer: Educational information only. If facing arrest or police custody, immediately seek an advocate for urgent bail representation."
+        )
+
+    # 3. RENTAL LAW, TENANCY, EVICTION & DEPOSITS
+    elif any(k in q for k in ["rental", "rent", "tenant", "landlord", "evict", "lease", "deposit", "flat", "pg", "broker", "maintenance", "house", "apartment"]):
+        return (
+            f"🏠 LEGAL ADVISORY: RENTAL RIGHTS, TENANCY & DEPOSITS ({j.upper()})\n\n"
+            f"Query: \"{question}\"\n\n"
+            "1. APPLICABLE STATUTORY FRAMEWORK:\n"
+            "• Model Tenancy Act, State Rent Control Acts, and Section 106 Transfer of Property Act, 1882.\n"
+            "• Section 17 of the Registration Act, 1908 (Mandatory Registration of Leases).\n\n"
+            "2. TENANT LEGAL PROTECTIONS:\n"
+            "• Protection Against Unlawful Eviction: Landlords CANNOT arbitrarily evict a tenant, forcefully lock premises, or disconnect essential utilities (electricity/water). Doing so is an offense under tenancy statutes. Eviction requires a formal court decree from the Rent Court/Tribunal.\n"
+            "• Statutory Notice Period: Landlords must serve minimum statutory written notice (typically 30 to 90 days as per registered agreement) before terminating tenancy.\n"
+            "• Security Deposit Refund: Deposit must be refunded within statutory window (usually 30 days) upon vacating. Deductions are strictly restricted to actual unpaid rent or demonstrable structural damage backed by repair invoices; normal wear and tear cannot be deducted.\n"
+            "• 11-Month Agreements: Leases exceeding 11 months must be compulsorily registered under Section 17 Registration Act. Unregistered long-term leases cannot be admitted as primary evidence of lease terms in court.\n\n"
+            "3. LANDLORD RIGHTS & GROUNDS FOR EVICTION:\n"
+            "• Persistent non-payment of rent for exceeding two consecutive months.\n"
+            "• Subletting the property without written consent or structural alteration damaging building integrity.\n\n"
+            "4. STEP-BY-STEP RECOURSE PLAN:\n"
+            "• Step 1: Issue formal Legal Demand Notice via an advocate demanding deposit refund within 15 days.\n"
+            "• Step 2: File petition before the local Rent Authority / Rent Tribunal under the State Tenancy Act.\n"
+            "• Step 3: For non-refund of deposit, file Summary Suit under Order 37 CPC in Civil Court.\n\n"
+            "Disclaimer: Educational guidance. Review written lease clauses with a real estate legal counsel."
+        )
+
+
     if any(k in q for k in ["cheque", "check", "bounced", "dishonour", "insufficient fund", "stop payment"]):
         return (
             f"⚖️ LEGAL ADVISORY: CHEQUE DISHONOUR & RECOVERY ({j.upper()})\n\n"
