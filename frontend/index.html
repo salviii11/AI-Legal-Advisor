@@ -900,7 +900,7 @@ main {
   <header class="topbar">
     <div class="topbar-title">
       <h1 id="pageTitle">Legal Intelligence Dashboard</h1>
-      <p id="pageSubtitle">Select a legal domain below or ask any legal question to receive tailored statutory answers.</p>
+      <p id="pageSubtitle">Ask anything in this world — powered by Universal Live AI & Statutory Legal Intelligence.</p>
     </div>
 
     <div class="topbar-actions">
@@ -1001,7 +1001,7 @@ main {
         <!-- Composer Box -->
         <form id="chatForm">
           <div class="composer-box">
-            <textarea id="question" placeholder="Ask about educational rights, criminal law, rental agreements, salary disputes..." rows="2" required maxlength="4000"></textarea>
+            <textarea id="question" placeholder="Ask me anything in this world (science, tech, coding, law, education, history, advice)..." rows="2" required maxlength="4000"></textarea>
             <button class="btn" id="sendButton" type="submit">
               <span>Send</span> <span>↗</span>
             </button>
@@ -1293,7 +1293,7 @@ function setSection(name) {
   document.querySelectorAll(".section").forEach(s => s.classList.toggle("active", s.id === name));
   document.querySelectorAll(".nav button[data-section]").forEach(b => b.classList.toggle("active", b.dataset.section === name));
   const labels = {
-    dashboard: ["Legal Intelligence Dashboard", "Select a legal domain below or ask any legal question to receive tailored statutory answers."],
+    dashboard: ["Legal Intelligence Dashboard", "Ask anything in this world — powered by Universal Live AI & Statutory Legal Intelligence."],
     assistant: ["Dedicated Legal Consultation", "In-depth statutory Q&A and dispute resolution."],
     documents: ["Smart Legal Document Analysis", "Upload and examine contracts and agreements."],
     history: ["Consultation History", "Review previous inquiries and saved answers."],
@@ -1429,10 +1429,11 @@ function saveLocalQuery(question, answer, j, mode) {
   localStorage.setItem("legal_advisor_history", JSON.stringify(items.slice(0, 50)));
 }
 
-// Live Cloud LLM Fetcher (When user provides Groq / Gemini / OpenAI key)
-async function fetchCloudLLM(question, j) {
-  const systemPrompt = `You are a certified AI Legal Advisor for ${j} jurisdiction. Provide tailored statutory legal guidance. Structure your answer clearly with sections: 1. Applicable Acts & Sections, 2. Rights & Protections, 3. Step-by-Step Procedure, 4. Evidence Checklist. Conclude with an educational disclaimer.`;
+// Universal Live AI Engine (Answers literally anything in the world + legal expertise)
+async function fetchUniversalAI(question, j) {
+  const systemPrompt = `You are a brilliant, versatile, and highly knowledgeable AI Assistant and Legal Advisor for ${j} jurisdiction. You can answer questions about ANY topic in the world—including science, technology, programming, history, philosophy, daily life advice, literature, general knowledge, as well as specialized legal and statutory topics (such as educational rights, criminal law, tenancy, contracts, and cyber law). Give clear, well-structured, comprehensive, and helpful answers.`;
 
+  // 1. User-configured Custom Provider with Key
   if (aiProvider === "groq" && userApiKey) {
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
@@ -1446,12 +1447,13 @@ async function fetchCloudLLM(question, j) {
           { role: "system", content: systemPrompt },
           { role: "user", content: question }
         ],
-        temperature: 0.2
+        temperature: 0.3
       })
     });
-    if (!res.ok) throw new Error("Groq API returned status " + res.status);
-    const data = await res.json();
-    return data.choices[0].message.content;
+    if (res.ok) {
+      const data = await res.json();
+      return data.choices[0].message.content;
+    }
   }
 
   if (aiProvider === "gemini" && userApiKey) {
@@ -1463,9 +1465,10 @@ async function fetchCloudLLM(question, j) {
         contents: [{ parts: [{ text: systemPrompt + "\n\nUser Query: " + question }] }]
       })
     });
-    if (!res.ok) throw new Error("Gemini API returned status " + res.status);
-    const data = await res.json();
-    return data.candidates[0].content.parts[0].text;
+    if (res.ok) {
+      const data = await res.json();
+      return data.candidates[0].content.parts[0].text;
+    }
   }
 
   if (aiProvider === "openai" && userApiKey) {
@@ -1481,15 +1484,41 @@ async function fetchCloudLLM(question, j) {
           { role: "system", content: systemPrompt },
           { role: "user", content: question }
         ],
-        temperature: 0.2
+        temperature: 0.3
       })
     });
-    if (!res.ok) throw new Error("OpenAI API returned status " + res.status);
-    const data = await res.json();
-    return data.choices[0].message.content;
+    if (res.ok) {
+      const data = await res.json();
+      return data.choices[0].message.content;
+    }
   }
 
-  throw new Error("No cloud key configured");
+  // 2. Free Universal Live Generative AI Endpoint (Zero key required, answers anything in the world)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 14000);
+  try {
+    const res = await fetch("https://text.pollinations.ai/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: question }
+        ],
+        model: "openai"
+      }),
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    if (!res.ok) throw new Error("Universal AI status " + res.status);
+    const text = await res.text();
+    if (text && text.trim().length > 0) return text.trim();
+  } catch (err) {
+    clearTimeout(timeoutId);
+    throw err;
+  }
+
+  throw new Error("Universal AI endpoint unreachable");
 }
 
 // Comprehensive Autonomous Legal Knowledge Engine
@@ -1732,21 +1761,16 @@ $("chatForm").addEventListener("submit", async e => {
   $("chatLog").appendChild(waiting);
   $("chatLog").scrollTop = $("chatLog").scrollHeight;
 
-  // 1. If user has selected a cloud AI provider and entered an API key, use it
-  if (aiProvider !== "autonomous" && userApiKey) {
-    try {
-      const cloudAnswer = await fetchCloudLLM(q, jurisdiction);
-      $("waiting")?.remove();
-      addMessage(cloudAnswer, "ai", aiProvider.toUpperCase() + " AI RESPONSE");
-      saveLocalQuery(q, cloudAnswer, jurisdiction, aiProvider);
-      await loadHistory();
-      return;
-    } catch (cloudErr) {
-      console.warn("Cloud LLM error, falling back to Autonomous Legal Engine:", cloudErr);
-    } finally {
-      $("sendButton").disabled = false;
-      $("sendButton").innerHTML = "<span>Send</span> <span>↗</span>";
-    }
+  // 1. First, try the Universal Live AI Engine (Answers ANY topic in the world + law)
+  try {
+    const aiAnswer = await fetchUniversalAI(q, jurisdiction);
+    $("waiting")?.remove();
+    addMessage(aiAnswer, "ai", "UNIVERSAL AI INTELLIGENCE");
+    saveLocalQuery(q, aiAnswer, jurisdiction, "universal-ai");
+    await loadHistory();
+    return;
+  } catch (aiErr) {
+    console.warn("Universal live AI unavailable, trying backend API / local engine:", aiErr);
   }
 
   // 2. Try backend API if accessible
@@ -1764,7 +1788,7 @@ $("chatForm").addEventListener("submit", async e => {
     await loadHistory();
     await checkHealth();
   } catch (err) {
-    // 3. Resilient Autonomous Legal Knowledge Engine
+    // 3. Resilient Autonomous Legal Knowledge Engine Fallback
     $("waiting")?.remove();
     const legalAnswer = generateAutonomousLegalResponse(q, jurisdiction);
     saveLocalQuery(q, legalAnswer, jurisdiction, "autonomous");
