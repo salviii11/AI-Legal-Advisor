@@ -2,62 +2,112 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI Legal Advisor — Intelligent Legal Information System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>AI Legal Advisor — Intelligence Suite</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --primary: #4338ca;
-  --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
-  --primary-light: #e0e7ff;
-  --primary-border: #a5b4fc;
-  --accent-cyan: #06b6d4;
-  --slate-950: #090d16;
-  --slate-900: #0f172a;
-  --slate-850: #131c31;
-  --slate-800: #1e293b;
-  --slate-700: #334155;
-  --slate-600: #475569;
-  --slate-500: #64748b;
-  --slate-400: #94a3b8;
-  --slate-300: #cbd5e1;
-  --slate-200: #e2e8f0;
-  --slate-100: #f1f5f9;
-  --slate-50: #f8fafc;
-  --emerald: #059669;
-  --emerald-light: #ecfdf5;
-  --amber: #d97706;
-  --amber-light: #fffbeb;
-  --rose: #e11d48;
+  --bg-black: #06080d;
+  --bg-sidebar: #090c14;
+  --bg-card: #0d121d;
+  --bg-card-hover: #121826;
+  --bg-chat-log: #070a10;
+  --bg-ai-bubble: #111726;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-card: #182033;
+  --border-focus: #6366f1;
+  --primary: #4f46e5;
+  --primary-glow: rgba(79, 70, 229, 0.35);
+  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+  --cyan: #06b6d4;
+  --cyan-glow: rgba(6, 182, 212, 0.25);
+  --emerald: #10b981;
+  --emerald-bg: rgba(16, 185, 129, 0.12);
+  --amber: #f59e0b;
+  --rose: #f43f5e;
+  --text-white: #ffffff;
+  --text-light: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
   --radius-xl: 18px;
   --radius-lg: 12px;
   --radius-md: 8px;
-  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08);
-  --shadow-md: 0 4px 14px -2px rgb(0 0 0 / 0.08), 0 2px 6px -2px rgb(0 0 0 / 0.05);
-  --shadow-lg: 0 12px 28px -4px rgb(0 0 0 / 0.12), 0 4px 10px -2px rgb(0 0 0 / 0.06);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #f0f3f8;
-  color: var(--slate-800);
+  background: var(--bg-black);
+  color: var(--text-light);
   line-height: 1.6;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 button, input, select, textarea {
   font-family: inherit;
   font-size: inherit;
+  color: inherit;
 }
 
 .layout {
   display: flex;
   min-height: 100vh;
+  position: relative;
+}
+
+/* Mobile Header (Hidden on Desktop) */
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: rgba(9, 12, 20, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0 18px;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+}
+
+.mobile-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-white);
+}
+
+.mobile-brand span { color: #818cf8; }
+
+.menu-toggle {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-white);
+  padding: 7px 12px;
+  border-radius: var(--radius-md);
+  font-size: 18px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+/* Mobile Drawer Overlay */
+.drawer-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 140;
 }
 
 /* Sidebar */
@@ -65,22 +115,21 @@ button, input, select, textarea {
   position: fixed;
   inset: 0 auto 0 0;
   width: 260px;
-  background: linear-gradient(180deg, var(--slate-950) 0%, var(--slate-900) 100%);
-  color: white;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border-subtle);
   padding: 24px 16px;
   display: flex;
   flex-direction: column;
-  z-index: 50;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+  z-index: 150;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .brand-wrapper {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 6px 12px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 10px 24px;
+  border-bottom: 1px solid var(--border-subtle);
   margin-bottom: 20px;
 }
 
@@ -92,22 +141,22 @@ button, input, select, textarea {
   display: grid;
   place-items: center;
   font-size: 22px;
-  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.4);
+  box-shadow: 0 0 20px var(--primary-glow);
 }
 
 .brand-text h2 {
-  font-size: 17px;
+  font-size: 16.5px;
   font-weight: 800;
   letter-spacing: -0.3px;
-  color: #fff;
+  color: var(--text-white);
   line-height: 1.2;
 }
 
 .brand-text span {
-  font-size: 11px;
+  font-size: 10.5px;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  color: #a5b4fc;
+  color: #818cf8;
   font-weight: 700;
 }
 
@@ -121,38 +170,35 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   gap: 12px;
-  border: 0;
+  border: 1px solid transparent;
   border-radius: var(--radius-lg);
   padding: 12px 14px;
-  color: #94a3b8;
+  color: var(--text-muted);
   background: transparent;
   text-align: left;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13.5px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
 .nav button .nav-icon {
   font-size: 18px;
-  opacity: 0.8;
-  transition: transform 0.2s;
+  opacity: 0.7;
 }
 
 .nav button:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: #f1f5f9;
-}
-
-.nav button:hover .nav-icon {
-  transform: translateX(2px);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-white);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .nav button.active {
-  background: linear-gradient(90deg, rgba(79, 70, 229, 0.3) 0%, rgba(99, 102, 241, 0.15) 100%);
-  color: #fff;
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0.05) 100%);
+  color: var(--text-white);
   border-left: 3px solid #818cf8;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 
 .nav button.active .nav-icon {
@@ -162,29 +208,32 @@ button, input, select, textarea {
 
 .sidebar-footer {
   margin-top: auto;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  font-size: 12px;
+  font-size: 11.5px;
   line-height: 1.5;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 .sidebar-footer b {
-  color: #e2e8f0;
+  color: var(--text-white);
   display: flex;
   align-items: center;
   gap: 6px;
   margin-bottom: 4px;
+  font-size: 12px;
 }
 
 /* Main Surface */
 main {
   margin-left: 260px;
-  padding: 32px 40px;
+  padding: 32px 36px;
   flex: 1;
-  max-width: 1480px;
+  max-width: 1460px;
+  min-width: 0;
+  width: calc(100% - 260px);
 }
 
 /* Topbar */
@@ -192,50 +241,49 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  margin-bottom: 24px;
+  gap: 16px;
+  margin-bottom: 22px;
   flex-wrap: wrap;
 }
 
 .topbar-title h1 {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 800;
-  letter-spacing: -0.6px;
-  color: var(--slate-900);
+  letter-spacing: -0.5px;
+  color: var(--text-white);
 }
 
 .topbar-title p {
-  color: var(--slate-500);
-  font-size: 14px;
+  color: var(--text-muted);
+  font-size: 13.5px;
   margin-top: 2px;
 }
 
 .topbar-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .jurisdiction-pill {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: white;
-  border: 1px solid var(--slate-200);
+  gap: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
   padding: 8px 14px;
   border-radius: 999px;
-  box-shadow: var(--shadow-sm);
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
-  color: var(--slate-700);
+  color: var(--text-muted);
 }
 
 .jurisdiction-pill select {
   border: none;
   background: transparent;
   font-weight: 700;
-  color: var(--primary);
+  color: #818cf8;
   outline: none;
   cursor: pointer;
 }
@@ -244,14 +292,13 @@ main {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #ecfdf5;
-  border: 1px solid #a7f3d0;
-  color: #065f46;
+  background: var(--emerald-bg);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
   border-radius: 999px;
   padding: 8px 14px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
-  box-shadow: var(--shadow-sm);
 }
 
 .pulse-dot {
@@ -259,13 +306,13 @@ main {
   height: 8px;
   background: var(--emerald);
   border-radius: 50%;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-  70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+  70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
   100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
 }
 
@@ -278,39 +325,38 @@ main {
   padding: 4px 2px 14px;
   margin-bottom: 20px;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 .category-pills-bar::-webkit-scrollbar { display: none; }
 
 .cat-pill {
-  border: 1px solid var(--slate-200);
-  background: white;
-  color: var(--slate-700);
-  padding: 9px 15px;
+  border: 1px solid var(--border-card);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  padding: 9px 16px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 650;
   display: flex;
   align-items: center;
   gap: 7px;
   white-space: nowrap;
-  box-shadow: var(--shadow-sm);
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .cat-pill:hover {
-  background: var(--primary-light);
-  border-color: var(--primary-border);
-  color: var(--primary);
+  background: var(--bg-card-hover);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: var(--text-white);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
 }
 
 .cat-pill.active {
   background: var(--primary-gradient);
-  color: white;
+  color: var(--text-white);
   border-color: transparent;
-  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+  box-shadow: 0 0 16px var(--primary-glow);
 }
 
 /* Buttons */
@@ -323,118 +369,116 @@ main {
   border-radius: var(--radius-lg);
   background: var(--primary-gradient);
   color: white;
-  padding: 11px 18px;
-  font-weight: 600;
-  font-size: 14px;
-  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+  padding: 10px 18px;
+  font-weight: 650;
+  font-size: 13.5px;
+  box-shadow: 0 2px 10px var(--primary-glow);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
 .btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+  box-shadow: 0 4px 18px rgba(99, 102, 241, 0.45);
 }
 
 .btn.secondary {
-  background: white;
-  color: var(--slate-700);
-  border: 1px solid var(--slate-200);
-  box-shadow: var(--shadow-sm);
+  background: var(--bg-card);
+  color: var(--text-light);
+  border: 1px solid var(--border-card);
+  box-shadow: none;
 }
 
 .btn.secondary:hover {
-  background: var(--slate-50);
-  border-color: var(--slate-300);
-  box-shadow: var(--shadow-md);
+  background: var(--bg-card-hover);
+  border-color: var(--border-focus);
 }
 
 .btn.ghost {
   background: transparent;
-  color: var(--slate-600);
-  border: 1px solid var(--slate-200);
+  color: var(--text-muted);
+  border: 1px solid var(--border-card);
   box-shadow: none;
-  padding: 8px 14px;
-  font-size: 13px;
+  padding: 7px 12px;
+  font-size: 12.5px;
 }
 
 .btn.ghost:hover {
-  background: white;
-  color: var(--slate-900);
-  border-color: var(--slate-300);
+  background: var(--bg-card-hover);
+  color: var(--text-white);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Stats Cards */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
 }
 
 .stat-card {
-  background: white;
-  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
   border-radius: var(--radius-xl);
-  padding: 22px;
+  padding: 20px;
   display: flex;
   align-items: center;
-  gap: 18px;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.2s, box-shadow 0.2s;
+  gap: 16px;
+  transition: transform 0.2s, border-color 0.2s;
 }
 
 .stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  border-color: rgba(99, 102, 241, 0.35);
 }
 
 .stat-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   display: grid;
   place-items: center;
-  font-size: 24px;
+  font-size: 22px;
   flex-shrink: 0;
 }
 
-.stat-icon.indigo { background: #eef2ff; color: #4f46e5; }
-.stat-icon.emerald { background: #ecfdf5; color: #059669; }
-.stat-icon.cyan { background: #ecfeff; color: #0891b2; }
+.stat-icon.indigo { background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.25); }
+.stat-icon.emerald { background: var(--emerald-bg); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.25); }
+.stat-icon.cyan { background: var(--cyan-glow); color: #38bdf8; border: 1px solid rgba(6, 182, 212, 0.25); }
 
 .stat-content .label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--slate-500);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-dim);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
 }
 
 .stat-content strong {
   display: block;
-  font-size: 22px;
+  font-size: 19px;
   font-weight: 800;
-  color: var(--slate-900);
-  margin-top: 4px;
-  letter-spacing: -0.4px;
+  color: var(--text-white);
+  margin-top: 3px;
+  letter-spacing: -0.3px;
+  word-break: break-word;
 }
 
 /* Dashboard Grid */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.8fr) minmax(320px, 1fr);
-  gap: 24px;
+  grid-template-columns: minmax(0, 1.8fr) minmax(300px, 1fr);
+  gap: 20px;
   align-items: start;
 }
 
 .panel {
-  background: white;
-  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
   border-radius: var(--radius-xl);
-  padding: 26px;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 24px;
+  padding: 22px;
+  margin-bottom: 20px;
 }
 
 .panel-header {
@@ -442,37 +486,39 @@ main {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .panel-header h2 {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 750;
-  color: var(--slate-900);
+  color: var(--text-white);
   letter-spacing: -0.3px;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-/* Chat Log */
+/* Chat Window */
 .chat-window {
-  background: #f8fafc;
-  border: 1px solid var(--slate-200);
+  background: var(--bg-chat-log);
+  border: 1px solid var(--border-card);
   border-radius: var(--radius-lg);
-  padding: 20px;
-  height: 400px;
+  padding: 18px;
+  height: 410px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: #232c42 transparent;
 }
 
 .chat-bubble {
   max-width: 90%;
-  padding: 16px 20px;
+  padding: 15px 18px;
   border-radius: 16px;
-  font-size: 14.5px;
+  font-size: 14px;
   line-height: 1.65;
   white-space: pre-wrap;
   position: relative;
@@ -480,20 +526,20 @@ main {
 }
 
 .chat-bubble.ai {
-  background: white;
-  color: var(--slate-850);
-  border: 1px solid var(--slate-200);
+  background: var(--bg-ai-bubble);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-top-left-radius: 4px;
   align-self: flex-start;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .chat-bubble.user {
   background: var(--primary-gradient);
-  color: white;
+  color: #ffffff;
   border-top-right-radius: 4px;
   align-self: flex-end;
-  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+  box-shadow: 0 4px 14px var(--primary-glow);
 }
 
 .chat-bubble .meta {
@@ -506,21 +552,17 @@ main {
   letter-spacing: 0.6px;
   text-transform: uppercase;
   margin-bottom: 8px;
-  opacity: 0.85;
-}
-
-.chat-bubble.ai .meta {
-  color: var(--primary);
-  border-bottom: 1px solid var(--slate-100);
-  padding-bottom: 6px;
+  color: #818cf8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 5px;
 }
 
 .copy-btn {
-  background: #f1f5f9;
-  border: 1px solid var(--slate-200);
-  font-size: 11.5px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 11px;
   cursor: pointer;
-  color: var(--slate-700);
+  color: var(--text-light);
   padding: 3px 8px;
   border-radius: 6px;
   font-weight: 600;
@@ -528,88 +570,94 @@ main {
 }
 
 .copy-btn:hover {
-  background: var(--primary-light);
-  border-color: var(--primary-border);
-  color: var(--primary);
+  background: rgba(99, 102, 241, 0.3);
+  color: var(--text-white);
+  border-color: #818cf8;
 }
 
 /* Composer */
 .composer-box {
-  margin-top: 16px;
+  margin-top: 14px;
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: flex-end;
-  background: white;
-  border: 1.5px solid var(--slate-300);
+  background: #090c14;
+  border: 1.5px solid var(--border-card);
   border-radius: var(--radius-lg);
   padding: 8px 12px;
-  box-shadow: var(--shadow-sm);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .composer-box:focus-within {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  border-color: #818cf8;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
 .composer-box textarea {
   flex: 1;
   border: none;
+  background: transparent;
   outline: none;
   resize: none;
-  min-height: 52px;
+  min-height: 48px;
   max-height: 140px;
-  font-size: 14.5px;
+  font-size: 14px;
   line-height: 1.5;
-  color: var(--slate-800);
-  padding: 6px 0;
+  color: var(--text-white);
+  padding: 4px 0;
+}
+
+.composer-box textarea::placeholder {
+  color: var(--text-dim);
 }
 
 .composer-hint {
-  font-size: 12px;
-  color: var(--slate-500);
-  margin-top: 8px;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  margin-top: 6px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 
 /* Quick Prompt Chips */
 .chips-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 14px;
+  gap: 6px;
+  margin-top: 12px;
 }
 
 .chip {
-  background: white;
-  border: 1px solid var(--slate-200);
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
   border-radius: 999px;
-  padding: 7px 13px;
-  font-size: 12.5px;
+  padding: 6px 12px;
+  font-size: 12px;
   font-weight: 600;
-  color: var(--slate-700);
+  color: var(--text-muted);
   cursor: pointer;
   transition: all 0.15s;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 .chip:hover {
-  background: var(--primary-light);
-  border-color: var(--primary-border);
-  color: var(--primary);
+  background: var(--bg-card-hover);
+  border-color: #818cf8;
+  color: var(--text-white);
   transform: translateY(-1px);
 }
 
-/* Legal Topic Cards */
+/* Legal Topic Explorer Items */
 .topic-card {
   display: flex;
   align-items: flex-start;
-  gap: 14px;
-  padding: 13px;
+  gap: 12px;
+  padding: 12px;
   border-radius: var(--radius-lg);
   border: 1px solid transparent;
   transition: all 0.2s;
@@ -617,40 +665,40 @@ main {
 }
 
 .topic-card:hover {
-  background: var(--slate-50);
-  border-color: var(--slate-200);
+  background: var(--bg-card-hover);
+  border-color: var(--border-card);
   transform: translateX(3px);
 }
 
 .topic-icon {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 10px;
-  background: #f1f5f9;
+  background: rgba(255, 255, 255, 0.05);
   display: grid;
   place-items: center;
-  font-size: 20px;
+  font-size: 18px;
   flex-shrink: 0;
 }
 
 .topic-info b {
   display: block;
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
-  color: var(--slate-900);
+  color: var(--text-white);
   margin-bottom: 2px;
 }
 
 .topic-info p {
-  font-size: 12px;
-  color: var(--slate-500);
+  font-size: 11.5px;
+  color: var(--text-dim);
   line-height: 1.4;
 }
 
 /* Upload Dropzone */
 .upload-dropzone {
-  background: #f8fafc;
-  border: 2px dashed #cbd5e1;
+  background: #090c14;
+  border: 2px dashed var(--border-card);
   border-radius: var(--radius-xl);
   padding: 36px 20px;
   text-align: center;
@@ -660,58 +708,57 @@ main {
 
 .upload-dropzone:hover {
   border-color: #818cf8;
-  background: #eef2ff;
+  background: rgba(99, 102, 241, 0.04);
 }
 
 .upload-icon-circle {
-  width: 64px;
-  height: 64px;
-  background: white;
+  width: 60px;
+  height: 60px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 28px;
-  margin: 0 auto 16px;
-  box-shadow: var(--shadow-sm);
+  font-size: 26px;
+  margin: 0 auto 14px;
 }
 
 .file-input { display: none; }
 
 /* History Cards */
 .history-item-card {
-  background: white;
-  border: 1px solid var(--slate-200);
+  background: #090c14;
+  border: 1px solid var(--border-card);
   border-radius: var(--radius-lg);
-  padding: 16px;
-  margin-bottom: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
   transition: all 0.2s;
 }
 
 .history-item-card:hover {
-  border-color: var(--primary-border);
-  box-shadow: var(--shadow-sm);
+  border-color: rgba(99, 102, 241, 0.4);
 }
 
 .history-item-card b {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
-  color: var(--slate-900);
+  color: var(--text-white);
 }
 
 .history-item-card .item-meta {
-  font-size: 12px;
-  color: var(--slate-400);
+  font-size: 11.5px;
+  color: var(--text-dim);
   margin: 6px 0 10px;
 }
 
 /* Disclaimer Banner */
 .disclaimer-banner {
-  background: linear-gradient(90deg, #fffbeb 0%, #fef3c7 100%);
-  border: 1px solid #fde68a;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
   border-radius: var(--radius-lg);
   padding: 14px 18px;
-  font-size: 13px;
-  color: #92400e;
+  font-size: 12.5px;
+  color: #fbbf24;
   line-height: 1.5;
   display: flex;
   align-items: flex-start;
@@ -727,25 +774,24 @@ main {
   display: block;
   font-size: 13px;
   font-weight: 600;
-  color: var(--slate-700);
+  color: var(--text-light);
   margin-bottom: 6px;
 }
 
 .form-control {
   width: 100%;
   padding: 11px 14px;
-  border: 1px solid var(--slate-300);
+  border: 1px solid var(--border-card);
   border-radius: var(--radius-lg);
-  background: white;
-  font-size: 14px;
-  color: var(--slate-800);
+  background: #090c14;
+  font-size: 13.5px;
+  color: var(--text-white);
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s;
 }
 
 .form-control:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+  border-color: #818cf8;
 }
 
 .section { display: none; }
@@ -756,32 +802,71 @@ main {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* RESPONSIVE DESIGN (All Screen Sizes) */
 @media (max-width: 1024px) {
   .dashboard-grid { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: 1fr 1fr; }
 }
 
-@media (max-width: 768px) {
-  .sidebar { position: static; width: 100%; padding: 16px; height: auto; }
-  .layout { flex-direction: column; }
-  main { margin-left: 0; padding: 20px; }
+@media (max-width: 860px) {
+  .mobile-header { display: flex; }
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .drawer-backdrop.open { display: block; }
+  main {
+    margin-left: 0;
+    width: 100%;
+    padding: 76px 18px 24px;
+  }
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .topbar-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 600px) {
   .stats-grid { grid-template-columns: 1fr; }
-  .nav { flex-direction: row; overflow-x: auto; padding-bottom: 8px; }
-  .nav button { white-space: nowrap; padding: 10px 14px; }
-  .sidebar-footer { display: none; }
+  .panel { padding: 16px; }
+  .chat-window { height: 360px; padding: 12px; }
+  .chat-bubble { max-width: 95%; font-size: 13.5px; padding: 12px 14px; }
+  .composer-box { padding: 6px 10px; }
 }
 </style>
 </head>
 <body>
+
+<!-- Mobile Header -->
+<header class="mobile-header">
+  <div class="mobile-brand">
+    <span style="font-size: 20px;">⚖️</span>
+    <span>AI Legal Advisor</span>
+  </div>
+  <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu">
+    ☰
+  </button>
+</header>
+
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+
 <div class="layout">
 
-<!-- Sidebar -->
-<aside class="sidebar">
+<!-- Sidebar Navigation -->
+<aside class="sidebar" id="sidebar">
   <div class="brand-wrapper">
     <div class="brand-icon">⚖️</div>
     <div class="brand-text">
       <h2>AI Legal Advisor</h2>
-      <span>Intelligence Suite</span>
+      <span>Black Edition Suite</span>
     </div>
   </div>
 
@@ -804,8 +889,8 @@ main {
   </nav>
 
   <div class="sidebar-footer">
-    <b><span>🛡️</span> Legal Jurisdictions Active</b>
-    Covers Educational Rights, Criminal Law, Tenancy, Consumer, Employment & Cyber Law under Indian statutory acts.
+    <b><span>🛡️</span> Legal Intelligence Active</b>
+    Specific statutory protections for Educational Rights, Criminal Defense, Tenancy, and Consumer Law.
   </div>
 </aside>
 
@@ -845,28 +930,28 @@ main {
     <button class="cat-pill active" data-domain="all">
       <span>⚖️</span> All Legal Domains
     </button>
-    <button class="cat-pill" data-domain="educational" data-prompt="What are my educational rights regarding fee refunds, degree withholding by colleges, and anti-ragging laws in India?">
+    <button class="cat-pill" data-domain="educational" data-prompt="educational">
       <span>🎓</span> Educational Rights
     </button>
-    <button class="cat-pill" data-domain="criminal" data-prompt="What are the essential criminal law rights regarding FIR registration, police arrest without warrant, and anticipatory bail under BNS and BNSS?">
+    <button class="cat-pill" data-domain="criminal" data-prompt="criminal">
       <span>⚖️</span> Criminal Law & Defense
     </button>
-    <button class="cat-pill" data-domain="rental" data-prompt="What are the legal rights of a tenant regarding security deposit refund, unlawful eviction, and notice periods under tenancy law?">
+    <button class="cat-pill" data-domain="rental" data-prompt="rental">
       <span>🏠</span> Rental & Tenancy
     </button>
-    <button class="cat-pill" data-domain="consumer" data-prompt="What steps can a consumer take for a defective product or deficient service under the Consumer Protection Act, 2019?">
+    <button class="cat-pill" data-domain="consumer" data-prompt="consumer">
       <span>🛍️</span> Consumer Protection
     </button>
-    <button class="cat-pill" data-domain="employment" data-prompt="What are employee rights against unpaid salary, arbitrary termination, and refusal to issue a relieving letter?">
+    <button class="cat-pill" data-domain="employment" data-prompt="employment">
       <span>💼</span> Employment & Salary
     </button>
-    <button class="cat-pill" data-domain="cyber" data-prompt="What immediate legal action and cyber helpline 1930 protocol should be taken for online financial fraud or unauthorized UPI transactions?">
+    <button class="cat-pill" data-domain="cyber" data-prompt="cyber">
       <span>🔐</span> Cyber Crime & Privacy
     </button>
-    <button class="cat-pill" data-domain="family" data-prompt="What is the legal procedure for mutual consent divorce and maintenance under matrimonial law?">
+    <button class="cat-pill" data-domain="family" data-prompt="family">
       <span>💍</span> Family & Matrimonial
     </button>
-    <button class="cat-pill" data-domain="traffic" data-prompt="What are the legal rules, penalties, and Good Samaritan rights under the Motor Vehicles Act?">
+    <button class="cat-pill" data-domain="traffic" data-prompt="traffic">
       <span>🚦</span> Traffic & Motor Laws
     </button>
   </div>
@@ -877,7 +962,7 @@ main {
       <div class="stat-card">
         <div class="stat-icon indigo">🎓</div>
         <div class="stat-content">
-          <span class="label">Legal Domains Covered</span>
+          <span class="label">Domains Supported</span>
           <strong>Educational · Criminal · Rental +</strong>
         </div>
       </div>
@@ -923,7 +1008,7 @@ main {
           </div>
           <div class="composer-hint">
             <span>Press <b>Enter ↵</b> to send (Shift+Enter for newline)</span>
-            <span style="color: var(--primary); font-weight: 600;">Tailored Answers for Educational, Criminal, Rental & More</span>
+            <span style="color: #818cf8; font-weight: 600;">Tailored Answers for Educational, Criminal, Rental & More</span>
           </div>
         </form>
 
@@ -1006,14 +1091,14 @@ main {
             <button class="btn ghost" data-goto="history">View all</button>
           </div>
           <div id="recentQueries">
-            <p style="color: var(--slate-400); font-size: 13px; text-align: center; padding: 12px;">No past queries recorded.</p>
+            <p style="color: var(--text-dim); font-size: 13px; text-align: center; padding: 12px;">No past queries recorded.</p>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Legal Disclaimer Notice -->
-    <div class="disclaimer-banner" style="margin-top: 24px;">
+    <div class="disclaimer-banner" style="margin-top: 20px;">
       <span style="font-size: 20px;">⚠️</span>
       <div>
         <strong>Important Disclaimer:</strong> This application is an educational prototype engineered to explain legal terminology and statutory rights under Indian and international frameworks. It does not provide formal legal advice, nor does it establish an attorney-client relationship. Consult a licensed advocate for specific court representation.
@@ -1027,7 +1112,7 @@ main {
       <div class="panel-header">
         <h2><span>✦</span> Dedicated Legal Consultation</h2>
       </div>
-      <p style="color: var(--slate-600); font-size: 14px; margin-bottom: 20px;">
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">
         Use the comprehensive AI assistant console to examine legal scenarios with detailed step-by-step statutory remedies.
       </p>
       <button class="btn" data-goto="dashboard">Return to Main Consultation Desk</button>
@@ -1040,25 +1125,25 @@ main {
       <div class="panel-header">
         <h2><span>▤</span> Smart Legal Document Analysis</h2>
       </div>
-      <p style="color: var(--slate-600); font-size: 14px; margin-bottom: 20px;">
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">
         Upload contracts, agreements, or legal draft files (PDF or TXT up to 5 MB) to extract and inspect clauses.
       </p>
 
       <div class="upload-dropzone" id="dropZone">
         <div class="upload-icon-circle">📎</div>
-        <h3 style="font-size: 17px; font-weight: 750; color: var(--slate-900); margin-bottom: 4px;">Choose a legal document</h3>
-        <p style="color: var(--slate-500); font-size: 13px; margin-bottom: 16px;">Supports PDF contracts, lease drafts, and plain text files</p>
+        <h3 style="font-size: 16px; font-weight: 750; color: var(--text-white); margin-bottom: 4px;">Choose a legal document</h3>
+        <p style="color: var(--text-dim); font-size: 13px; margin-bottom: 16px;">Supports PDF contracts, lease drafts, and plain text files</p>
         <label class="btn secondary" for="documentFile" style="cursor: pointer;">
           Browse File on Computer
         </label>
         <input class="file-input" id="documentFile" type="file" accept=".pdf,.txt">
-        <div id="selectedFile" style="margin-top: 14px; font-size: 13px; font-weight: 600; color: var(--primary);"></div>
+        <div id="selectedFile" style="margin-top: 14px; font-size: 13px; font-weight: 600; color: #818cf8;"></div>
         <button class="btn" id="extractButton" style="margin-top: 14px; display: inline-flex;" disabled>
           Extract Document Content
         </button>
       </div>
 
-      <div id="documentResult" style="display: none; margin-top: 20px; background: #f8fafc; border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 18px; font-size: 13.5px; font-family: 'JetBrains Mono', monospace; max-height: 350px; overflow-y: auto; white-space: pre-wrap;"></div>
+      <div id="documentResult" style="display: none; margin-top: 20px; background: #090c14; border: 1px solid var(--border-card); border-radius: var(--radius-lg); padding: 18px; font-size: 13px; font-family: 'JetBrains Mono', monospace; max-height: 350px; overflow-y: auto; white-space: pre-wrap; color: #cbd5e1;"></div>
     </div>
   </section>
 
@@ -1069,14 +1154,14 @@ main {
         <h2><span>◷</span> Consultation History</h2>
         <div style="display: flex; gap: 8px;">
           <button class="btn ghost" id="refreshHistory">Refresh</button>
-          <button class="btn ghost" id="clearHistory" style="color: #ef4444;">Clear All</button>
+          <button class="btn ghost" id="clearHistory" style="color: var(--rose);">Clear All</button>
         </div>
       </div>
-      <p style="color: var(--slate-500); font-size: 13px; margin-bottom: 20px;">
+      <p style="color: var(--text-dim); font-size: 13px; margin-bottom: 20px;">
         All questions and generated guidance are stored locally in your session or backend database.
       </p>
       <div id="historyList">
-        <p style="color: var(--slate-400); font-size: 13px; text-align: center; padding: 24px;">Loading consultation history...</p>
+        <p style="color: var(--text-dim); font-size: 13px; text-align: center; padding: 24px;">Loading consultation history...</p>
       </div>
     </div>
   </section>
@@ -1096,7 +1181,7 @@ main {
           <option value="gemini">✨ Google Gemini AI (Gemini 1.5 Flash)</option>
           <option value="openai">🧠 OpenAI (GPT-4o / GPT-4o-Mini)</option>
         </select>
-        <p style="font-size: 12px; color: var(--slate-500); margin-top: 4px;">
+        <p style="font-size: 12px; color: var(--text-dim); margin-top: 4px;">
           Choose "Autonomous Legal Expert Engine" for instant built-in legal guidance, or choose Groq / Gemini / OpenAI to connect live cloud LLMs.
         </p>
       </div>
@@ -1104,8 +1189,8 @@ main {
       <div class="form-group" id="apiKeyGroup" style="display: none;">
         <label class="form-label" for="userApiKey">AI Provider API Key</label>
         <input class="form-control" id="userApiKey" type="password" placeholder="e.g. gsk_... for Groq, AIza... for Gemini, sk-... for OpenAI">
-        <p style="font-size: 12px; color: var(--slate-500); margin-top: 4px;">
-          Keys are stored strictly in your browser (localStorage) and never transmitted elsewhere. Get free keys at <a href="https://console.groq.com/keys" target="_blank" style="color: var(--primary);">console.groq.com</a> or <a href="https://aistudio.google.com/" target="_blank" style="color: var(--primary);">aistudio.google.com</a>.
+        <p style="font-size: 12px; color: var(--text-dim); margin-top: 4px;">
+          Keys are stored strictly in your browser (localStorage) and never transmitted elsewhere. Get free keys at <a href="https://console.groq.com/keys" target="_blank" style="color: #818cf8;">console.groq.com</a> or <a href="https://aistudio.google.com/" target="_blank" style="color: #818cf8;">aistudio.google.com</a>.
         </p>
       </div>
 
@@ -1143,6 +1228,32 @@ let aiProvider = localStorage.getItem("legal_advisor_provider") || "autonomous";
 let userApiKey = localStorage.getItem("legal_advisor_user_key") || "";
 let historyCache = [];
 const $ = id => document.getElementById(id);
+
+// Mobile Drawer Toggle
+const menuToggle = $("menuToggle");
+const sidebar = $("sidebar");
+const drawerBackdrop = $("drawerBackdrop");
+
+function toggleDrawer(open) {
+  if (open) {
+    sidebar.classList.add("open");
+    drawerBackdrop.classList.add("open");
+  } else {
+    sidebar.classList.remove("open");
+    drawerBackdrop.classList.remove("open");
+  }
+}
+
+if (menuToggle) {
+  menuToggle.addEventListener("click", () => {
+    const isOpen = sidebar.classList.contains("open");
+    toggleDrawer(!isOpen);
+  });
+}
+
+if (drawerBackdrop) {
+  drawerBackdrop.addEventListener("click", () => toggleDrawer(false));
+}
 
 // Synchronize inputs
 if ($("jurisdiction")) $("jurisdiction").value = jurisdiction;
@@ -1190,6 +1301,7 @@ function setSection(name) {
   };
   $("pageTitle").textContent = labels[name][0];
   $("pageSubtitle").textContent = labels[name][1];
+  toggleDrawer(false); // Close drawer on mobile selection
   if (name === "history") loadHistory();
   if (name === "assistant") $("question").focus();
 }
@@ -1295,7 +1407,7 @@ async function checkHealth() {
   } catch {
     statusLabel.textContent = "Autonomous AI Active";
     modeLabel.textContent = "Multi-Domain Engine";
-    if (dot) dot.style.background = "#4f46e5";
+    if (dot) dot.style.background = "#6366f1";
   }
 }
 
@@ -1718,7 +1830,7 @@ $("extractButton").addEventListener("click", async () => {
 // Load Query History
 async function loadHistory() {
   for (const id of ["historyList", "recentQueries"]) {
-    if ($(id)) $(id).innerHTML = '<div style="color: var(--slate-400); font-size: 13px; text-align: center; padding: 16px;">Loading history…</div>';
+    if ($(id)) $(id).innerHTML = '<div style="color: var(--text-dim); font-size: 13px; text-align: center; padding: 16px;">Loading history…</div>';
   }
 
   try {
@@ -1740,7 +1852,7 @@ function renderHistory(target, items) {
   const el = $(target);
   el.innerHTML = "";
   if (!items.length) {
-    el.innerHTML = '<div style="color: var(--slate-400); font-size: 13px; text-align: center; padding: 24px;">No consultations recorded yet.</div>';
+    el.innerHTML = '<div style="color: var(--text-dim); font-size: 13px; text-align: center; padding: 24px;">No consultations recorded yet.</div>';
     return;
   }
   items.forEach(item => {
@@ -1772,13 +1884,13 @@ function renderRecent(target, items) {
   const el = $(target);
   el.innerHTML = "";
   if (!items.length) {
-    el.innerHTML = '<p style="color: var(--slate-400); font-size: 13px; text-align: center; padding: 12px;">No past queries recorded.</p>';
+    el.innerHTML = '<p style="color: var(--text-dim); font-size: 13px; text-align: center; padding: 12px;">No past queries recorded.</p>';
     return;
   }
   items.forEach(item => {
     const itemDiv = document.createElement("div");
-    itemDiv.style.cssText = "padding: 10px 0; border-bottom: 1px solid var(--slate-100); cursor: pointer;";
-    itemDiv.innerHTML = `<b style="font-size: 13px; color: var(--slate-800); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.question}</b><span style="font-size: 11px; color: var(--slate-400);">${new Date(item.created_at).toLocaleDateString()} · ${item.jurisdiction}</span>`;
+    itemDiv.style.cssText = "padding: 10px 0; border-bottom: 1px solid var(--border-card); cursor: pointer;";
+    itemDiv.innerHTML = `<b style="font-size: 13px; color: var(--text-white); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.question}</b><span style="font-size: 11px; color: var(--text-dim);">${new Date(item.created_at).toLocaleDateString()} · ${item.jurisdiction}</span>`;
     itemDiv.addEventListener("click", () => {
       setSection("dashboard");
       addMessage(item.question, "user", "HISTORY");
